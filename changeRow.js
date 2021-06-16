@@ -1,5 +1,5 @@
 var num_row = 0;
-var stock_selection = '<div class="col-4"><input type="text" list="tickers" class="form-control stock_input" placeholder="Stock Symbol"><datalist id="tickers"><option>TSLA</option><option>AAPL</option><option>BABA</option><option>SPY</option></datalist></input></div>'
+var stock_selection = '<div class="col-4"><input type="text" list="tickers" class="form-control stock_input" id=' + num_row + 'placeholder="Stock Symbol"><datalist id="tickers"><option>TSLA</option><option>AAPL</option><option>BABA</option><option>SPY</option></datalist></input></div>'
 var percent_allocation =  '<div class="col-4"><input type="number" min="0" max="100" placeholder="%" class="form-control percent" onchange="percent_change() "></div>'
 
 function addRow() {
@@ -13,22 +13,18 @@ function addRow() {
 }
 
 $( document ).ready(function() {
-    console.log( "Document ready" );
     addRow();
 });
 
 function percent_change(){
-    
     var total_percent=0;
-    console.log("reset");
     $('#total').text(total_percent);
     $(".percent").each(function(index) {
         
         var percent = $(this).val();
-        console.log(percent);
         if (Number.isInteger(parseInt(percent))){
             total_percent += parseInt(percent);
         };
-        $('#total').text(total_percent);
+        $('#total').text(total_percent + " %");
       });
   };
