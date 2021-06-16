@@ -22,8 +22,8 @@ function paintChart(){
             "translate(" + margin.left + "," + margin.top + ")");
 
   //Read the data
-  csvPath = "https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/3_TwoNumOrdered_comma.csv"
-  csvPath2 = "tsla.csv"
+  // csvPath = "https://raw.githubusercontent.com/holtzy/data_to_viz/master/Example_dataset/3_TwoNumOrdered_comma.csv"
+  csvPath2 = "data/tsla.csv"
   d3.csv(csvPath2,
 
     // When reading the csv, I must format variables:
