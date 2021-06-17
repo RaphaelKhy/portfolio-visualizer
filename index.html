@@ -10,12 +10,14 @@
         integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
         crossorigin="anonymous"></script>
     <script type='text/javascript' src='https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js'></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-csv/1.0.21/jquery.csv.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-csv/1.0.21/jquery.csv.min.js"
+        integrity="sha512-Y8iWYJDo6HiTo5xtml1g4QqHtl/PO1w+dmUpQfQSOTqKNsMhExfyPN2ncNAe9JuJUSKzwK/b6oaNPop4MXzkwg=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://d3js.org/d3.v4.js"></script>
 </head>
 
 <body>
-
+    <!-- Navigation Bar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container-fluid">
             <a class="navbar-brand" href="#">Stock Visualizer</a>
@@ -34,8 +36,9 @@
         </div>
     </nav>
 
+    
     <div class="container">
-        <div id='stock_list'>
+        <div id='stockList'>
             <div class="row">
                 <div class="col-4">
                     <p class="font-weight-bold">Stock</p>
@@ -59,18 +62,31 @@
         </div>
         <div class="row">
             <div class="col-4 offset-8">
-                <button type="button" onclick="chartButtonClick()" class="btn btn-success btn-sm"> Plot
-                    chart</button>
+                <button type="button" onclick="chartButtonClick();" class="btn btn-success btn-sm"> Plot chart</button>
             </div>
         </div>
     </div>
 
-    <div class ="container" id="chartContainer">
+    <div class="container">
+        <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-header">
+            <strong class="mr-auto">Error</strong>
+            <button type="button" class="ml-2 mb-1 close" onclick="$('.toast').toast('hide');" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+            </div>
+            <div class="toast-body ">
+            </div>
+        </div>
+    </div>
+
+    <div class="container" id="chartContainer">
         <div id="my_dataviz"></div>
     </div>
 
-    <script type='text/javascript' src="displayChart.js"></script>
-    <script type='text/javascript' src="changeRow.js"></script>
+    <script type='text/javascript' src="chart.js"></script>
+    <script type='text/javascript' src="input.js"></script>
+    <script type='text/javascript' src="calculateReturn.js"></script>
 </body>
 
 </html>

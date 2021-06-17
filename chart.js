@@ -1,7 +1,7 @@
 //Requires D3
 
 var chartRequested = false;
-var acceptedStocks = ['AAPL', 'BABA', 'SPY', 'TSLA']
+var acceptedStocks = ['AAPL', 'BABA', 'SPY', 'TSLA'];
 var stockDict ={};
 
 $(window).on("resize", function () {
@@ -10,6 +10,69 @@ $(window).on("resize", function () {
     paintChart();
   };
 });
+
+function chartButtonClick() {
+  ValidateInputData();
+  // if(isInputValid){
+  //   collectData();
+  // };
+  // removeChart();
+  // paintChart();
+  // chartRequested = true;
+};
+
+function ValidateInputData(){
+  inputChange();
+
+  var totalPercent=0;
+
+  $('div[id^="stockRow"]').each(function(){
+    divRow = $(this)[0];
+    stock = $(divRow).children().eq(0).children().eq(0)[0].value;
+    percent = parseFloat($(divRow).children().eq(1).children().eq(0)[0].value);
+    
+    if(!isValidStock(stock)){    //test that each stock is valid
+      console.log("Invalid stock");
+      var toast = $('.toast-body')[0];
+      toast.innerText = "Invalid Stock";
+      $('.toast').toast('show');
+      isInputValid = false;
+      return false;
+    }
+    totalPercent += percent;
+  });
+  
+  if(isInputValid===false){
+    return;
+  }else if(true && totalPercent!=100){    //test if total percent = 100
+    var toast = $('.toast-body')[0];
+    toast.innerText = "Total percent must be equal to 100";
+    $('.toast').toast('show');
+    isInputValid = false;
+    return;
+  }
+
+  console.log("valid data: " + isInputValid);
+
+};
+
+function collectData(){
+
+  var data = [];
+
+  $('div[id^="stockRow"]').each(function(){
+    divRow = $(this)[0];
+    stock = $(divRow).children().eq(0).children().eq(0)[0].value;
+    percent = parseFloat($(divRow).children().eq(1).children().eq(0)[0].value);
+    
+    var rowDict = {};
+    rowDict.stock = stock;
+    rowDict.percentAllocation = percent;
+    data.push(rowDict);
+
+  });
+  return data;
+}
 
 function paintChart() {
   containerWidth = document.getElementById('chartContainer').getBoundingClientRect().width
@@ -28,7 +91,7 @@ function paintChart() {
       "translate(" + margin.left + "," + margin.top + ")");
 
   //Read the data
-  csvPath2 = "data/tsla.csv"
+  csvPath2 = "data/chart.csv"
   d3.csv(csvPath2,
 
     // When reading the csv, I must format variables:
@@ -70,50 +133,3 @@ function removeChart() {
   d3.select("svg").remove();
 }
 
-function chartButtonClick() {
-    chartRequested = true;
-    collectAndValidateInputData();
-    removeChart();
-    paintChart();
-};
-
-function collectAndValidateInputData(){
-  var percentSum = 0;
-  stockDict = {};
-
-  $('div[id^="stock-row"]').each(function(index) {
-    divRow = $(this)[0];
-    symbolInput = $(divRow).children().eq(0).children().eq(0)[0].value;
-    percentInput = parseInt($(divRow).children().eq(1).children().eq(0)[0].value);
-
-    //pushes symbolInput and percentInput to Dictionary
-    if (!isNaN(percentInput) && acceptedStocks.includes(symbolInput) && percentInput>=0){
-
-      //Sum percentages for duplicate symbols
-      if(symbolInput in stockDict){
-        percentSum = stockDict[symbolInput] + percentInput;
-        console.log("duplicate found: " + symbolInput + "\nNew Sum: " + percentSum);
-        stockDict[symbolInput] = percentSum;
-      }
-      else{
-         stockDict[symbolInput] = percentInput;
-      }
-    }
-    console.log(stockDict);
-    if (!isNaN(percentInput)){
-      percentSum += percentInput;
-    }
-
-    if(percentSum == 100){
-
-      //check that percentSum associated with valid symbolInput
-      var dictPercentSum = 0;
-      for (const [key, value] of Object.entries(stockDict)) {
-        dictPercentSum+=value;
-      };
-      if(dictPercentSum == 100){
-        console.log("percentSum is 100");
-      };
-    };
-  });
-}
