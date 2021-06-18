@@ -8,6 +8,7 @@ $(window).on("resize", function () {
   if (chartRequested) {
     removeChart();
     paintChart();
+    paintChart();
   };
 });
 
@@ -15,12 +16,13 @@ function chartButtonClick() {
   ValidateInputData();
   if(isInputValid){
     $('.toast').toast('hide');
+    removeChart();
+    removeChart();
     inputData = collectData();
     mainCalc(inputData);
     // console.log(storage);
-    removeChart();
     // paintChartTest();
-    setTimeout(paintChart,100);
+    setTimeout(paintChart,200);
     chartRequested = true;
   };
   
@@ -96,9 +98,7 @@ function paintChart(){
     .attr("transform",
       "translate(" + margin.left + "," + margin.top + ")");
 
-  // console.log(storage[storage.length-1]);
   buildChart(storage[storage.length-1].data);
-
 
   function buildChart(data) {
     // console.log(data);
@@ -111,13 +111,23 @@ function paintChart(){
       .call(d3.axisBottom(x));
 
     // Add Y axis
+
+    // get minimum y value
+    var minYValue = 0;
+    for(var day = 0; day < data.length; day++){
+      value = data[day].value;
+      if(value < minYValue){
+        minYValue = value;
+      };
+    };
+    // console.log(data);
+    // console.log(minYValue);
     var y = d3.scaleLinear()
-      .domain([0, d3.max(data, function (d) { return +d.value; })])
+      .domain([minYValue, d3.max(data, function (d) { return +d.value; })])
       .range([height, 0]);
     svg.append("g")
       .call(d3.axisLeft(y));
 
-    console.log("hi");
     // Add the line
     svg.append("path")
       .datum(data)
