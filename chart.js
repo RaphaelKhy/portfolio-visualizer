@@ -1,7 +1,7 @@
 //Requires D3
 
 var chartRequested = false;
-var acceptedStocks = ['AAPL', 'BABA', 'SPY', 'TSLA'];
+var acceptedStocks = ['AAPL', 'BA', 'BABA', 'BAC', 'GLD', 'GME', 'IWM', 'QQQ', 'SLV', 'SPY', 'T', 'TSLA', 'XOM'];
 var stockDict ={};
 
 $(window).on("resize", function () {
@@ -13,12 +13,17 @@ $(window).on("resize", function () {
 
 function chartButtonClick() {
   ValidateInputData();
-  // if(isInputValid){
-  //   collectData();
-  // };
-  // removeChart();
-  // paintChart();
-  // chartRequested = true;
+  if(isInputValid){
+    $('.toast').toast('hide');
+    inputData = collectData();
+    mainCalc(inputData);
+    // console.log(storage);
+    removeChart();
+    // paintChartTest();
+    setTimeout(paintChart,50);
+    chartRequested = true;
+  };
+  
 };
 
 function ValidateInputData(){
@@ -54,6 +59,7 @@ function ValidateInputData(){
 
   console.log("valid data: " + isInputValid);
 
+
 };
 
 function collectData(){
@@ -74,7 +80,89 @@ function collectData(){
   return data;
 }
 
-function paintChart() {
+function paintChart(){
+  containerWidth = document.getElementById('chartContainer').getBoundingClientRect().width
+  // set the dimensions and margins of the graph
+  var margin = { top: 10, right: 30, bottom: 30, left: 60 },
+    width = (containerWidth * 0.9) - margin.left - margin.right,
+    height = 400 - margin.top - margin.bottom;
+
+  // append the svg object to the body of the page
+  var svg = d3.select("#my_dataviz")
+    .append("svg")
+    .attr("width", width + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform",
+      "translate(" + margin.left + "," + margin.top + ")");
+
+  // console.log(storage[storage.length-1]);
+  buildChart(storage[storage.length-1].data);
+
+
+  function buildChart(data) {
+    // console.log(data);
+    // Add X axis --> it is a date format
+    var x = d3.scaleTime()
+      .domain(d3.extent(data, function (d) { return d.date; }))
+      .range([0, width]);
+    svg.append("g")
+      .attr("transform", "translate(0," + height + ")")
+      .call(d3.axisBottom(x));
+
+    // Add Y axis
+    var y = d3.scaleLinear()
+      .domain([0, d3.max(data, function (d) { return +d.value; })])
+      .range([height, 0]);
+    svg.append("g")
+      .call(d3.axisLeft(y));
+
+    console.log("hi");
+    // Add the line
+    svg.append("path")
+      .datum(data)
+      .attr("fill", "none")
+      .attr("stroke", "steelblue")
+      .attr("stroke-width", 1.5)
+      .attr("d", d3.line()
+        .x(function (d) { return x(d.date) })
+        .y(function (d) { return y(d.value) }))
+
+    
+    // Add the x Axis
+    svg.append("g")
+    .attr("transform", "translate(0," + height + ")")
+    .call(d3.axisBottom(x));
+
+    // text label for the x axis
+    svg.append("text")             
+      .attr("transform",
+            "translate(" + (width/2) + " ," + 
+                          (height + margin.top + 20) + ")")
+      .style("text-anchor", "middle")
+      .text("Date");
+
+    // Add the y Axis
+    svg.append("g")
+      .call(d3.axisLeft(y));
+
+    // text label for the y axis
+    svg.append("text")
+      .attr("transform", "rotate(-90)")
+      .attr("y", 0 - margin.left)
+      .attr("x",0 - (height / 2))
+      .attr("dy", "1em")
+      .style("text-anchor", "middle")
+      .text("% Return"); 
+      
+    };
+}
+
+function removeChart() {
+  d3.select("svg").remove();
+}
+
+function paintChartTest() {
   containerWidth = document.getElementById('chartContainer').getBoundingClientRect().width
   // set the dimensions and margins of the graph
   var margin = { top: 10, right: 30, bottom: 30, left: 30 },
@@ -91,17 +179,20 @@ function paintChart() {
       "translate(" + margin.left + "," + margin.top + ")");
 
   //Read the data
-  csvPath2 = "data/chart.csv"
+  csvPath2 = "data/test.csv"
   d3.csv(csvPath2,
 
     // When reading the csv, I must format variables:
     function (d) {
-      return { date: d3.timeParse("%m/%d/%Y")(d.date), value: d.value }
+      // console.log(d);
+      var g = { date: d3.timeParse("%m/%d/%Y")(d.date), value: d.value };
+      // console.log(g);
+      return g;
     },
 
     // Now I can use this dataset:
     function (data) {
-
+      // console.log(data);
       // Add X axis --> it is a date format
       var x = d3.scaleTime()
         .domain(d3.extent(data, function (d) { return d.date; }))
@@ -128,8 +219,3 @@ function paintChart() {
           .y(function (d) { return y(d.value) }))
     })
 }
-
-function removeChart() {
-  d3.select("svg").remove();
-}
-

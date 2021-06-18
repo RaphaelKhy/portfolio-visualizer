@@ -34,7 +34,7 @@ function getStockDataFromCSV(stockName, position, cb){
 
     var datePrice = [];
 
-    var csvPath = "data/" + stockName.toLowerCase() + ".csv";
+    var csvPath = "data/" + stockName + ".csv";
 
     $.get(csvPath, function(response){
         splitResponse = response.split('\n');
@@ -88,35 +88,30 @@ function AddPercentReturnToStorage(){
     }
 };
 
-function mergeStocks(){
-    //combine performance of stocks bassed on allocation
+function mergeStocks(){//combine performance of stocks bassed on allocation
+    
 
-    //create combined stock
     storageLength = storage.length;
     storage[storageLength] = {stock:"combined", percentAllocation: 100};
     dataLength = storage[0].data.length;
-    CombinedDataArray = [];
+    allDaysReturn = [];
+    var dayTotalReturn = [];
+    var dateString;
 
-    for(var i = 0; i < dataLength; i++){
-        var totalWeightedPercentReturn = 0;
-        for(var j = 0; j < storageLength; j++){
-            var percentR = storage[j].data[i].percentReturn;
-            // console.log(storage[j].stock, i);
-            // console.log("total return:" , percentR);
-            stockAllocation = (storage[j].percentAllocation);
-            stockWeightedPercentReturn = (percentR * stockAllocation)/100
-            // console.log("weighted return:" , stockWeightedPercentReturn);
-            totalWeightedPercentReturn += stockWeightedPercentReturn;
-            // console.log("Total Weighted Return: ", totalWeightedPercentReturn);
-            CombinedDataArray.push({date:storage[j].data[i].date, value:totalWeightedPercentReturn});
+    for(var date = 0; date < dataLength; date++){
+        dateString = storage[0].data[date].date;
+        dayTotalReturn = [];
+        for(var stock = 0; stock < storageLength; stock++){
+            var percentReturn = storage[stock].data[date].percentReturn;
+            stockAllocation = (storage[stock].percentAllocation);
+            dayTotalReturn.push((percentReturn * stockAllocation)/100);
         }
+        var totalReturnPerDay = 0;
+        for(var s = 0; s < storageLength; s++){
+            totalReturnPerDay+=dayTotalReturn[s];
+        }
+        allDaysReturn.push({"date": new Date(dateString),"value":totalReturnPerDay});
     }
-    // console.log(CombinedDataArray);
-    storage[storageLength].data = CombinedDataArray;
+    // console.log(allDaysReturn);
+    storage[storageLength].data = allDaysReturn;
 }
-
-// mainCalc([
-//     {stock:'TSLA',percentAllocation:40},
-//     {stock:'SPY',percentAllocation:40},
-//     {stock:'AAPL',percentAllocation:20}
-// ]);

@@ -1,8 +1,8 @@
 var rowNum = 0;
 var isInputValid = true;
 
-$(document).ready(function() { //when document loads add one row
-    addRow();
+$(document).ready(function() { 
+    addRow(); //when document loads add one row
 });
 
 function addRow(){
@@ -32,6 +32,7 @@ function createStockInputElement(){
     input.className = "form-control"
     input.setAttribute("list", "tickers");
     input.setAttribute("onchange", "inputChange();");
+    input.setAttribute('onkeyup', "keyUpUpperCase(this);");
 
     var dataList = document.createElement('datalist'); //create datalist
     dataList.id="tickers";
@@ -74,13 +75,15 @@ function createDeleteButton(){
 }
 
 function inputChange(){
+
     isInputValid = true;
     var totalPercent=0;
     $('#total').text(totalPercent); //set total percent to 0
 
     $('div[id^="stockRow"]').each(function() { //iterate through row inputs
         divRow = $(this)[0];
-        stock = $(divRow).children().eq(0).children().eq(0)[0].value;
+        stock = $(divRow).children().eq(0).children().eq(0)[0].value.toUpperCase();
+        // $(divRow).children().eq(0).children().eq(0)[0].value = stock;
         percent = parseFloat($(divRow).children().eq(1).children().eq(0)[0].value);
         // console.log("stock: ", stock);
         // console.log("percent: ", percent)
@@ -88,6 +91,15 @@ function inputChange(){
         if(!isNaN(parseFloat(percent))){ // Update Total
             totalPercent += parseFloat(percent);
             $('#total').text(totalPercent);
+        }
+        if(stock.length > 0){  //test if invalid stock
+            if(!isValidStock(stock)){ 
+            var toast = $('.toast-body')[0];
+            toast.innerText = "Invalid Stock: " + stock;
+            $('.toast').toast('show');
+            isInputValid = false;
+            return false;
+            }
         }
         if(percent<0){ //test if percent is negative
             var toast = $('.toast-body')[0];
@@ -103,15 +115,6 @@ function inputChange(){
             isInputValid = false;
             return false;
         }
-        if(stock.length > 0){  //test if invalid stock
-            if(!isValidStock(stock)){ 
-            var toast = $('.toast-body')[0];
-            toast.innerText = "Invalid Stock: " + stock;
-            $('.toast').toast('show');
-            isInputValid = false;
-            return false;
-            }
-        }
     });
 };
 
@@ -119,4 +122,7 @@ function isValidStock(stock){
     return acceptedStocks.includes(stock);
 }
 
+function keyUpUpperCase(obj) {
+    obj.value = obj.value.toUpperCase();
+}
 
