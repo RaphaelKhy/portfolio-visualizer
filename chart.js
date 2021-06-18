@@ -20,7 +20,7 @@ function chartButtonClick() {
     // console.log(storage);
     removeChart();
     // paintChartTest();
-    setTimeout(paintChart,50);
+    setTimeout(paintChart,100);
     chartRequested = true;
   };
   
