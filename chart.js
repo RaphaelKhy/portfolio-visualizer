@@ -8,7 +8,6 @@ $(window).on("resize", function () {
   if (chartRequested) {
     removeChart();
     paintChart();
-    paintChart();
   };
 });
 
@@ -16,8 +15,13 @@ function chartButtonClick() {
   ValidateInputData();
   if(isInputValid){
     $('.toast').toast('hide');
-    removeChart();
-    removeChart();
+
+    //check if there are charts in the DOM
+    while(d3.select("#svg-elem").node()){ //remove all charts
+      console.log("chart Exists");
+      removeChart();
+    }
+
     inputData = collectData();
     mainCalc(inputData);
     // console.log(storage);
@@ -108,9 +112,8 @@ function paintChart(){
       .range([0, width]);
     svg.append("g")
       .attr("transform", "translate(0," + height + ")")
+      .attr("id", "svg-elem")
       .call(d3.axisBottom(x));
-
-    // Add Y axis
 
     // get minimum y value
     var minYValue = 0;
@@ -120,8 +123,8 @@ function paintChart(){
         minYValue = value;
       };
     };
-    // console.log(data);
-    // console.log(minYValue);
+    
+    // Add Y axis
     var y = d3.scaleLinear()
       .domain([minYValue, d3.max(data, function (d) { return +d.value; })])
       .range([height, 0]);
@@ -164,7 +167,6 @@ function paintChart(){
       .attr("dy", "1em")
       .style("text-anchor", "middle")
       .text("% Return"); 
-      
     };
 }
 
