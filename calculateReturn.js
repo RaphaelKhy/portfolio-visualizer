@@ -1,42 +1,21 @@
-
 var storage=[];
-var position=0;
-var outputArray = [];
 
-function mainCalc(userInput){
+async function mainCalc(userInput){
     storage = userInput;
-    position=0;
-    collectStockDataFromCSVCallBack(position, storage[position].stock)
-};
-
-var collectStockDataFromCSVCallBack = function (position, stockName, file_data){
-    if (file_data == null){
-        getStockDataFromCSV(stockName, position, collectStockDataFromCSVCallBack);
+    for(var position = 0; position < storage.length; position++){
+        stockName = storage[position].stock;
+        var data = await getStockDataFromCSV(stockName);
+        storage[position].data = data;
     }
-    else {
-        storage[position].data = file_data;
-        position++;
-        if (position < storage.length){
-            getStockDataFromCSV(storage[position].stock, position, collectStockDataFromCSVCallBack);
-        }
-        else {
-            
-            AddPercentReturnToStorage();
-            mergeStocks();
-            // console.log(storage);
-        }
-    }
+    AddPercentReturnToStorage();
+    mergeStocks();
 }
 
-function getStockDataFromCSV(stockName, position, cb){
-    //gets stock data from static csv file
-    //Returns date and price data as array
-
-    var datePrice = [];
-
+async function getStockDataFromCSV(stockName){//gets stock data from static csv file
+    var stockDatePrice = [];
     var csvPath = "data/" + stockName + ".csv";
 
-    $.get(csvPath, function(response){
+    await $.get(csvPath, function(response){
         splitResponse = response.split('\n');
         var length = splitResponse.length;
         for(var i = 0; i < length; i++){
@@ -58,16 +37,15 @@ function getStockDataFromCSV(stockName, position, cb){
 
             //Push datePriceDict to datePriceArray if Dictionary isn't empty
             if(!Object.keys(datePriceDict).length == 0){
-                datePrice.push(datePriceDict);
+                stockDatePrice.push(datePriceDict);
             }
         };
-        cb(position,stockName, datePrice);
     })
+    return stockDatePrice;
 };
 
-function AddPercentReturnToStorage(){
-    //Adds percent return to storage
-
+function AddPercentReturnToStorage(){//Adds percent return to each stock in storage
+    
     //iterate through stocks in storage
     for(var i = 0; i < storage.length; i++){
         stock = storage[i];
@@ -78,19 +56,14 @@ function AddPercentReturnToStorage(){
         for(var j = 0; j < dataLength; j++){
             newPrice = stock.data[j].price;
             stockName = storage[i].stock;
-            // console.log(stockName);
-            // console.log(newPrice);
             percentChange = ((newPrice-startingPrice)/startingPrice)*100;
-            // console.log(percentChange);
             storage[i].data[j].percentReturn = percentChange;
-            // console.log(storage[i].data[j]);
         }
     }
 };
 
 function mergeStocks(){//combine performance of stocks bassed on allocation
     
-
     storageLength = storage.length;
     storage[storageLength] = {stock:"combined", percentAllocation: 100};
     dataLength = storage[0].data.length;
@@ -112,6 +85,5 @@ function mergeStocks(){//combine performance of stocks bassed on allocation
         }
         allDaysReturn.push({"date": new Date(dateString),"value":totalReturnPerDay});
     }
-    // console.log(allDaysReturn);
     storage[storageLength].data = allDaysReturn;
 }

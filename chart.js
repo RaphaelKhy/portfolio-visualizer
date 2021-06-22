@@ -1,52 +1,43 @@
-//Requires D3
-
 var chartRequested = false;
-var acceptedStocks = ['AAPL', 'BA', 'BABA', 'BAC', 'GLD', 'GME', 'IWM', 'QQQ', 'SLV', 'SPY', 'T', 'TSLA', 'XOM'];
-var stockDict ={};
+const acceptedStocks = ['AAPL', 'BA', 'BABA', 'BAC', 'GLD', 'GME', 'IWM', 'QQQ', 'SLV', 'SPY', 'T', 'TSLA', 'XOM'];
 
 $(window).on("resize", function () {
   if (chartRequested) {
     removeChart();
-    paintChart();
+    displayChart();
   };
 });
 
-function chartButtonClick() {
+async function chartButtonClick() {
   ValidateInputData();
   if(isInputValid){
     $('.toast').toast('hide');
 
     //check if there are charts in the DOM
-    while(d3.select("#svg-elem").node()){ //remove all charts
-      console.log("chart Exists");
+    //remove all charts
+    while(d3.select("#svg-elem").node()){ 
       removeChart();
     }
-
+    
     inputData = collectData();
-    mainCalc(inputData);
-    // console.log(storage);
-    // paintChartTest();
-    setTimeout(paintChart,200);
+    await mainCalc(inputData);
+    displayChart();
     chartRequested = true;
   };
-  
 };
 
-function ValidateInputData(){
+function ValidateInputData(){//additional input validation when plot chart button clicked
   inputChange();
 
   var totalPercent=0;
 
-  $('div[id^="stockRow"]').each(function(){
+  $('div[id^="stockRow"]').each(function() {
     divRow = $(this)[0];
     stock = $(divRow).children().eq(0).children().eq(0)[0].value;
     percent = parseFloat($(divRow).children().eq(1).children().eq(0)[0].value);
     
-    if(!isValidStock(stock)){    //test that each stock is valid
-      console.log("Invalid stock");
-      var toast = $('.toast-body')[0];
-      toast.innerText = "Invalid Stock";
-      $('.toast').toast('show');
+    if(!isValidStock(stock)){//test that each stock is valid
+      displayToast("Invalid Stock");
       isInputValid = false;
       return false;
     }
@@ -55,20 +46,14 @@ function ValidateInputData(){
   
   if(isInputValid===false){
     return;
-  }else if(true && totalPercent!=100){    //test if total percent = 100
-    var toast = $('.toast-body')[0];
-    toast.innerText = "Total percent must be equal to 100";
-    $('.toast').toast('show');
+  }else if(totalPercent!=100){//test if total percent = 100
+    displayToast("Total percent must be equal to 100");
     isInputValid = false;
     return;
   }
-
-  console.log("valid data: " + isInputValid);
-
-
 };
 
-function collectData(){
+function collectData(){ //collects user input after validation
 
   var data = [];
 
@@ -84,13 +69,15 @@ function collectData(){
 
   });
   return data;
+  
+
 }
 
-function paintChart(){
-  containerWidth = document.getElementById('chartContainer').getBoundingClientRect().width
+function displayChart(){ //builds and shows chart
+  containerWidth = document.getElementById('chartContainer').getBoundingClientRect().width; //get width from container
   // set the dimensions and margins of the graph
-  var margin = { top: 10, right: 30, bottom: 30, left: 60 },
-    width = (containerWidth * 0.9) - margin.left - margin.right,
+  var margin = { top: 10, right: 40, bottom: 30, left: 60 },
+    width = (containerWidth) - margin.left - margin.right,
     height = 400 - margin.top - margin.bottom;
 
   // append the svg object to the body of the page
@@ -105,7 +92,6 @@ function paintChart(){
   buildChart(storage[storage.length-1].data);
 
   function buildChart(data) {
-    // console.log(data);
     // Add X axis --> it is a date format
     var x = d3.scaleTime()
       .domain(d3.extent(data, function (d) { return d.date; }))
@@ -114,19 +100,10 @@ function paintChart(){
       .attr("transform", "translate(0," + height + ")")
       .attr("id", "svg-elem")
       .call(d3.axisBottom(x));
-
-    // get minimum y value
-    var minYValue = 0;
-    for(var day = 0; day < data.length; day++){
-      value = data[day].value;
-      if(value < minYValue){
-        minYValue = value;
-      };
-    };
     
     // Add Y axis
     var y = d3.scaleLinear()
-      .domain([minYValue, d3.max(data, function (d) { return +d.value; })])
+      .domain([getMinYValue(), d3.max(data, function (d) { return +d.value; })])
       .range([height, 0]);
     svg.append("g")
       .call(d3.axisLeft(y));
@@ -150,8 +127,7 @@ function paintChart(){
     // text label for the x axis
     svg.append("text")             
       .attr("transform",
-            "translate(" + (width/2) + " ," + 
-                          (height + margin.top + 20) + ")")
+            "translate(" + (width/2) + " ," + (height + margin.top + 20) + ")")
       .style("text-anchor", "middle")
       .text("Date");
 
@@ -166,16 +142,16 @@ function paintChart(){
       .attr("x",0 - (height / 2))
       .attr("dy", "1em")
       .style("text-anchor", "middle")
-      .text("% Return"); 
+      .text("Percent Return"); 
     };
 }
 
-function removeChart() {
+function removeChart() { //deletes chart
   d3.select("svg").remove();
 }
 
-function paintChartTest() {
-  containerWidth = document.getElementById('chartContainer').getBoundingClientRect().width
+function testDisplayChart() { //display chart for testing
+  containerWidth = document.getElementById('chartContainer').getBoundingClientRect().width; //get width of container
   // set the dimensions and margins of the graph
   var margin = { top: 10, right: 30, bottom: 30, left: 30 },
     width = (containerWidth * 0.9) - margin.left - margin.right,
@@ -230,4 +206,16 @@ function paintChartTest() {
           .x(function (d) { return x(d.date) })
           .y(function (d) { return y(d.value) }))
     })
+}
+
+function getMinYValue(){ //gets minimum percent return from mergeStocks stock data
+  var minYValue = 0;
+  data = storage[storage.length-1].data;
+  for(var day = 0; day < data.length; day++){
+    value = data[day].value;
+    if(value < minYValue){
+      minYValue = value;
+    };
+  };
+  return minYValue;
 }
