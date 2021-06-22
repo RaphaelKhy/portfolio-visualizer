@@ -16,7 +16,7 @@ async function chartButtonClick() {
     //check if there are charts in the DOM
     //remove all charts
     while(d3.select("#svg-elem").node()){ 
-      removeChart();
+      await removeChart();
     }
     
     inputData = collectData();
@@ -146,8 +146,8 @@ function displayChart(){ //builds and shows chart
     };
 }
 
-function removeChart() { //deletes chart
-  d3.select("svg").remove();
+async function removeChart() { //deletes chart
+  await d3.select("svg").remove();
 }
 
 function testDisplayChart() { //display chart for testing
