@@ -10,6 +10,7 @@ function addRow(){
     $('#stockList').append(inputRow);
     rowNum++;
 }
+
 function createInputRow(){
     var newdiv = document.createElement('div'); //create div
     newdiv.className = "row";
@@ -24,9 +25,9 @@ function createInputRow(){
 }
 
 function createStockInputElement(){
-    var newDiv = document.createElement('div'); //create div
+    var newDiv = document.createElement('div');
     newDiv.className = "col-4";
-    var input = document.createElement('input'); //create input
+    var input = document.createElement('input');
     input.id = rowNum;
     input.type = "text";
     input.className = "form-control"
@@ -34,10 +35,10 @@ function createStockInputElement(){
     input.setAttribute("onchange", "inputChange();");
     input.setAttribute('onkeyup', "keyUpUpperCase(this);");
 
-    var dataList = document.createElement('datalist'); //create datalist
+    var dataList = document.createElement('datalist');
     dataList.id="tickers";
 
-    for(var i = 0; i < acceptedStocks.length; i++){    //add options to dataList from acceptedStocks
+    for(var i = 0; i < acceptedStocks.length; i++){//add options to dataList from acceptedStocks
         var option = document.createElement('option');
         option.value = acceptedStocks[i];
         dataList.appendChild(option);
@@ -49,9 +50,9 @@ function createStockInputElement(){
 }
 
 function createPercentInputElement(){
-    var newdiv = document.createElement('div'); //create div
+    var newdiv = document.createElement('div');
     newdiv.className = "col-4";
-    var input = document.createElement('input'); //create input
+    var input = document.createElement('input');
     input.type = "number";
     input.min = "0";
     input.max = "100";
@@ -64,9 +65,9 @@ function createPercentInputElement(){
 }
 
 function createDeleteButton(){
-    var newdiv = document.createElement('div'); //create div
+    var newdiv = document.createElement('div');
     newdiv.className = "col-4";
-    var button = document.createElement('button'); //create button
+    var button = document.createElement('button');
     button.className = "btn btn-danger btn-sm";
     button.setAttribute("onclick", "this.parentNode.parentNode.remove(); inputChange();"); //delete row on click
     button.innerHTML='Delete';
@@ -74,8 +75,7 @@ function createDeleteButton(){
     return newdiv;
 }
 
-function inputChange(){
-
+function inputChange(){ //Preliminary input validation
     isInputValid = true;
     var totalPercent=0;
     $('#total').text(totalPercent); //set total percent to 0
@@ -83,35 +83,32 @@ function inputChange(){
     $('div[id^="stockRow"]').each(function() { //iterate through row inputs
         divRow = $(this)[0];
         stock = $(divRow).children().eq(0).children().eq(0)[0].value.toUpperCase();
-        // $(divRow).children().eq(0).children().eq(0)[0].value = stock;
         percent = parseFloat($(divRow).children().eq(1).children().eq(0)[0].value);
-        // console.log("stock: ", stock);
-        // console.log("percent: ", percent)
         
-        if(!isNaN(parseFloat(percent))){ // Update Total
+        if(!isNaN(parseFloat(percent))){ // Update totalPercent
             totalPercent += parseFloat(percent);
             $('#total').text(totalPercent);
         }
-        if(stock.length > 0){  //test if invalid stock
+
+        //test for invalid stock
+        if(stock.length > 0){
             if(!isValidStock(stock)){ 
-            var toast = $('.toast-body')[0];
-            toast.innerText = "Invalid Stock: " + stock;
-            $('.toast').toast('show');
+            displayToast("Invalid Stock: ", stock);
             isInputValid = false;
             return false;
             }
         }
-        if(percent<0){ //test if percent is negative
-            var toast = $('.toast-body')[0];
-            toast.innerText = "Negtive Percent";
-            $('.toast').toast('show');
+
+        //test for negative percent
+        if(percent<0){ 
+            displayToast("Negative Percent");
             isInputValid = false;
             return false;
         }
-        if(totalPercent > 100){ //test if totalPercent > 100
-            var toast = $('.toast-body')[0];
-            toast.innerText = "Percent greater that 100";
-            $('.toast').toast('show');
+
+        //test for totalPercent greater than 100
+        if(totalPercent > 100){
+            displayToast("Percent greater that 100");
             isInputValid = false;
             return false;
         }
@@ -126,3 +123,13 @@ function keyUpUpperCase(obj) {
     obj.value = obj.value.toUpperCase();
 }
 
+function displayToast(message, stock){
+    var toast = $('.toast-body')[0];
+    if(typeof stock != 'undefined'){
+        toast.innerText = message + stock;
+    }
+    else{
+        toast.innerText = message;
+    }
+    $('.toast').toast('show');
+}
