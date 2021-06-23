@@ -135,7 +135,7 @@ function displayToast(message){
     }).showToast();
 };
 
-function updateTotalPercent(){
+function updateTotalPercent(){//updates and returns total percent
     var totalPercent=0;
     $('#total').text(totalPercent);
     $('div[id^="stockRow"]').each(function() {
