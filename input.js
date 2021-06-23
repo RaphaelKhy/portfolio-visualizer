@@ -76,7 +76,7 @@ function createDeleteButton(){
 };
 
 function inputChange(){ //Preliminary input validation
-    updateTotalPercent();
+    totalPercent = updateTotalPercent();
     isInputValid = true;
     $('div[id^="stockRow"]').each(function() { //iterate through row inputs
         divRow = $(this)[0];
@@ -138,7 +138,6 @@ function displayToast(message){
 function updateTotalPercent(){
     var totalPercent=0;
     $('#total').text(totalPercent);
-
     $('div[id^="stockRow"]').each(function() {
         divRow = $(this)[0];
         stock = $(divRow).children().eq(0).children().eq(0)[0].value.toUpperCase();
@@ -146,7 +145,8 @@ function updateTotalPercent(){
         
         if(!isNaN(parseFloat(percent))){ // Update totalPercent
             totalPercent += parseFloat(percent);
-            $('#total').text(totalPercent);
         };
     });
+    $('#total').text(totalPercent);
+    return totalPercent;
 };

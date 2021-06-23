@@ -27,8 +27,16 @@ function ValidateInputData(){//additional input validation when plot chart butto
   }else{
     $('div[id^="stockRow"]').each(function() {
       divRow = $(this)[0];
+      stock = $(divRow).children().eq(0).children().eq(0)[0].value.toUpperCase();
       percent = parseFloat($(divRow).children().eq(1).children().eq(0)[0].value);
-      totalPercent += percent;
+
+      //delete empty stock row
+      if(stock === ''){
+        divRow.remove();
+      }else{
+        totalPercent+=percent;
+      }
+
     });
     if(totalPercent!=100){//test if total percent = 100
       displayToast("Total percent must be equal to 100");
