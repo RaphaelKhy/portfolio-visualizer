@@ -17,32 +17,15 @@
         integrity="sha512-Y8iWYJDo6HiTo5xtml1g4QqHtl/PO1w+dmUpQfQSOTqKNsMhExfyPN2ncNAe9JuJUSKzwK/b6oaNPop4MXzkwg=="
         crossorigin="anonymous" referrerpolicy="no-referrer"></script>
     <script src="https://d3js.org/d3.v4.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
 </head>
 
 <body>
-    <!-- Navigation Bar -->
-    <!-- <nav class="navbar navbar-expand-lg navbar-light bg-light">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">Stock Visualizer</a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavAltMarkup"
-                aria-controls="navbarNavAltMarkup" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
-                <div class="navbar-nav">
-                    <a class="nav-link active" aria-current="page" href="#">Home</a>
-                    <a class="nav-link" href="">Features</a>
-                    <a class="nav-link" href="">Pricing</a>
-                    <a class="nav-link disabled" href="#" tabindex="-1" aria-disabled="true">Disabled</a>
-                </div>
-            </div>
-        </div>
-    </nav> -->
-
     <!-- inputs -->
-    <div class="container">
+    <div class="container" id="inputContainer" style="max-width: 500px">
         <div id='stockList'>
-            <div class="row">
+            <div class="row ">
                 <div class="col-4">
                     <p class="font-weight-bold">Stock</p>
                 </div>
@@ -51,10 +34,9 @@
                 </div>
             </div>
         </div>
-
-        <div class="row">
-            <div class="col-4 offset-4">
-                <div class="alert alert-primary -sm" role="alert">
+        <div class="row ">
+            <div class="col-4 offset-4" >
+                <div class="alert alert-primary -sm" role="alert" >
                     Total: <span id="total"></span>
                 </div>
             </div>
@@ -69,25 +51,11 @@
             </div>
         </div>
     </div>
-
-    <!-- Toast -->
-    <div class="container">
-        <div class="toast" role="alert" aria-live="assertive" aria-atomic="true">
-            <div class="toast-header">
-                <strong class="me-auto">Error</strong>
-                <button type="button" class="btn-close" data-bs-dismiss="toast" onclick="$('.toast').toast('hide');"
-                    aria-label="Close">
-                </button>
-            </div>
-            <div class="toast-body ">
-                My toast
-            </div>
-        </div>
-    </div>
+    
     
     <!-- chart -->
     <div class="container" id="chartContainer">
-        <div id="my_dataviz"></div>
+        <div class="centered" id="my_dataviz"></div>
     </div>
 
     <script type='text/javascript' src="chart.js"></script>

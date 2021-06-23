@@ -11,14 +11,7 @@ $(window).on("resize", function () {
 async function chartButtonClick() {
   ValidateInputData();
   if(isInputValid){
-    $('.toast').toast('hide');
-
-    //check if there are charts in the DOM
-    //remove all charts
-    while(d3.select("#svg-elem").node()){ 
-      await removeChart();
-    }
-    
+    await  removeChart();
     inputData = collectData();
     await mainCalc(inputData);
     displayChart();
@@ -28,28 +21,27 @@ async function chartButtonClick() {
 
 function ValidateInputData(){//additional input validation when plot chart button clicked
   inputChange();
-
   var totalPercent=0;
+  if(!isInputValid){
+    return;
+  }else{
+    $('div[id^="stockRow"]').each(function() {
+      divRow = $(this)[0];
+      stock = $(divRow).children().eq(0).children().eq(0)[0].value.toUpperCase();
+      percent = parseFloat($(divRow).children().eq(1).children().eq(0)[0].value);
 
-  $('div[id^="stockRow"]').each(function() {
-    divRow = $(this)[0];
-    stock = $(divRow).children().eq(0).children().eq(0)[0].value;
-    percent = parseFloat($(divRow).children().eq(1).children().eq(0)[0].value);
-    
-    if(!isValidStock(stock)){//test that each stock is valid
-      displayToast("Invalid Stock");
+      //delete empty stock row
+      if(stock === ''){
+        divRow.remove();
+      }else{
+        totalPercent+=percent;
+      }
+
+    });
+    if(totalPercent!=100){//test if total percent = 100
+      displayToast("Total percent must be equal to 100");
       isInputValid = false;
-      return false;
     }
-    totalPercent += percent;
-  });
-  
-  if(isInputValid===false){
-    return;
-  }else if(totalPercent!=100){//test if total percent = 100
-    displayToast("Total percent must be equal to 100");
-    isInputValid = false;
-    return;
   }
 };
 
