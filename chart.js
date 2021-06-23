@@ -30,15 +30,16 @@ function ValidateInputData(){//additional input validation when plot chart butto
       stock = $(divRow).children().eq(0).children().eq(0)[0].value.toUpperCase();
       percent = parseFloat($(divRow).children().eq(1).children().eq(0)[0].value);
 
-      //delete empty stock row
-      if(stock === ''){
-        divRow.remove();
+      if(isNaN(percent) || stock ===''){
+        displayToast("Invalid Input");
+        isInputValid = false;
+        return;
       }else{
         totalPercent+=percent;
       }
 
     });
-    if(totalPercent!=100){//test if total percent = 100
+    if(totalPercent!=100 && isInputValid){//test if total percent = 100
       displayToast("Total percent must be equal to 100");
       isInputValid = false;
     }
