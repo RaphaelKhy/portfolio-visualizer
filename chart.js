@@ -30,7 +30,7 @@ function ValidateInputData(){//additional input validation when plot chart butto
       stock = $(divRow).children().eq(0).children().eq(0)[0].value.toUpperCase();
       percent = parseFloat($(divRow).children().eq(1).children().eq(0)[0].value);
 
-      if(isNaN(percent) || stock ===''){
+      if((isNaN(percent) || stock ==='') && isInputValid){
         displayToast("Invalid Input");
         isInputValid = false;
         return;
