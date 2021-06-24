@@ -19,11 +19,15 @@
     <script src="https://d3js.org/d3.v4.js"></script>
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 </head>
 
 <body>
     <!-- inputs -->
-    <div class="container" id="inputContainer" style="max-width: 500px">
+    <div class="container" id="inputContainer" style="max-width: 600px">
         <div id='stockList'>
             <div class="row ">
                 <div class="col-4">
@@ -35,27 +39,34 @@
             </div>
         </div>
         <div class="row ">
-            <div class="col-4 offset-4" >
-                <div class="alert alert-primary -sm" role="alert" >
+            <div class="col-4 offset-4">
+                <div class="alert alert-primary p-1" role="alert">
                     Total: <span id="total"></span>
                 </div>
             </div>
             <div class="col-4">
                 <button onclick="addRow();" type="button" class="btn btn-light btn-sm">Add New</button>
             </div>
-
         </div>
+
         <div class="row">
-            <div class="col-4 offset-4">
-                <button type="button" onclick="randomButtonClick();" class="btn btn-info btn-sm">Random</button>
+            <div class="col-4">
+                <select class="form-select form-select-sm" id="Time" aria-label=".form-select-sm example">
+                    <option selected>Max Available</option>
+                    <option value="1">6 months</option>
+                    <option value="2">1 year</option>
+                    <option value="3">2 years</option>
+                </select>
+            </div>
+            <div class="col-4">
+                <button type="button" onclick="randomButtonClick();" class="btn btn-info btn-sm">Random Input</button>
             </div>
             <div class="col-4">
                 <button type="button" onclick="chartButtonClick();" class="btn btn-success btn-sm"> Plot chart</button>
             </div>
         </div>
     </div>
-    
-    
+
     <!-- chart -->
     <div class="container" id="chartContainer">
         <div class="centered" id="my_dataviz"></div>

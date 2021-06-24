@@ -1,5 +1,5 @@
 var chartRequested = false;
-const acceptedStocks = ['AAPL', 'BA', 'BABA', 'BAC', 'GLD', 'GME', 'IWM', 'QQQ', 'SLV', 'SPY', 'T', 'TSLA', 'XOM'];
+const acceptedStocks = ['AAPL', 'BA', 'BABA', 'BAC', 'GLD', 'IWM', 'QQQ', 'SLV', 'SPY', 'T', 'TSLA', 'XOM'];
 
 $(window).on("resize", function () {
   if (chartRequested) {
