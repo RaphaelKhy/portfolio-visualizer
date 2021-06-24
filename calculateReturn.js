@@ -29,7 +29,7 @@ async function getStockDataFromCSV(stockName, selectedTime){//gets stock data fr
             startingIndex = 1006;
         }
         if(selectedTime === "2 years"){
-            startingIndex = 574;
+            startingIndex = 753;
         }
         
 
