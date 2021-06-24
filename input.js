@@ -3,6 +3,17 @@ var isInputValid = true;
 
 $(document).ready(function () {
     addRow(); //when document loads add one row
+    $(function() {
+        $('input[name="startDate"]').daterangepicker({
+          singleDatePicker: true,
+          showDropdowns: true,
+          minYear: 2000,
+          maxYear: parseInt(moment().format('YYYY'),10)
+        }, 
+        function(start, end, label) {
+          console.log(start, end)
+        });
+      });
 });
 
 function addRow() {

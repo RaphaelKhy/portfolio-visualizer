@@ -1,24 +1,39 @@
 var storage=[];
 
 async function mainCalc(userInput){
+    var selectedTime = $('#Time option:selected').text();
     storage = userInput;
+    
     for(var position = 0; position < storage.length; position++){
         stockName = storage[position].stock;
-        var data = await getStockDataFromCSV(stockName);
+        var data = await getStockDataFromCSV(stockName, selectedTime);
         storage[position].data = data;
     }
     AddPercentReturnToStorage();
     mergeStocks();
 }
 
-async function getStockDataFromCSV(stockName){//gets stock data from static csv file
+async function getStockDataFromCSV(stockName, selectedTime){//gets stock data from static csv file
     var stockDatePrice = [];
     var csvPath = "data/" + stockName + ".csv";
 
     await $.get(csvPath, function(response){
         splitResponse = response.split('\n');
         var length = splitResponse.length;
-        for(var i = 0; i < length; i++){
+        var startingIndex = 0;
+
+        if(selectedTime === "6 months"){
+            startingIndex = 1154;
+        }
+        if(selectedTime === "1 year"){
+            startingIndex = 1006;
+        }
+        if(selectedTime === "2 years"){
+            startingIndex = 574;
+        }
+        
+
+        for(var i = startingIndex; i < length; i++){
             var dataRow = splitResponse[i];
             var splitDataRow = dataRow.split(',');
             var datePriceDict = {};
