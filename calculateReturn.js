@@ -1,6 +1,6 @@
 var storage=[];
 
-async function mainCalc(userInput){
+async function calculateReturn(userInput){
     var selectedTime = $('#Time option:selected').text();
     storage = userInput;
     
@@ -11,6 +11,7 @@ async function mainCalc(userInput){
     }
     AddPercentReturnToStorage();
     mergeStocks();
+    getMinMaxValues();
 }
 
 async function getStockDataFromCSV(stockName, selectedTime){//gets stock data from static csv file
@@ -37,12 +38,12 @@ async function getStockDataFromCSV(stockName, selectedTime){//gets stock data fr
             var dataRow = splitResponse[i];
             var splitDataRow = dataRow.split(',');
             var datePriceDict = {};
-            var date = "";
+            var dateString = "";
             var price = 0;
 
-            date = splitDataRow[0];
-            if(date != ''){
-                datePriceDict['date'] = date;
+            dateString = splitDataRow[0];
+            if(dateString != ''){
+                datePriceDict['date'] = new Date(dateString);
             };
 
             price = parseFloat(splitDataRow[1]);
@@ -80,7 +81,7 @@ function AddPercentReturnToStorage(){//Adds percent return to each stock in stor
 function mergeStocks(){//combine performance of stocks bassed on allocation
     
     storageLength = storage.length;
-    storage[storageLength] = {stock:"combined", percentAllocation: 100};
+    storage[storageLength] = {stock:"Combined", percentAllocation: 100};
     dataLength = storage[0].data.length;
     allDaysReturn = [];
     var dayTotalReturn = [];
@@ -98,7 +99,39 @@ function mergeStocks(){//combine performance of stocks bassed on allocation
         for(var s = 0; s < storageLength; s++){
             totalReturnPerDay+=dayTotalReturn[s];
         }
-        allDaysReturn.push({"date": new Date(dateString),"value":totalReturnPerDay});
+        allDaysReturn.push({"date": new Date(dateString),"percentReturn":totalReturnPerDay});
     }
     storage[storageLength].data = allDaysReturn;
+}
+
+function getMinMaxValues(){
+    for(var stock = 0; stock <  storage.length; stock++){
+        var stockData = storage[stock].data;
+        var minimumPercentReturn = getMinValue(stockData);
+        var maximumPercentReturn = getMaxValue(stockData);
+        storage[stock].minValue = minimumPercentReturn;
+        storage[stock].maxValue = maximumPercentReturn;
+    }
+}
+
+function getMinValue(data) {//returns minimum percent return
+    var minYValue = 0;
+    for (var day = 0; day < data.length; day++) {
+        percentReturn = data[day].percentReturn;
+        if (percentReturn < minYValue) {
+        minYValue = percentReturn;
+        }
+    }
+    return minYValue;
+}
+
+function getMaxValue(data) {//returns minimum percent return
+    var maxYValue = 0;
+    for (var day = 0; day < data.length; day++) {
+        percentReturn = data[day].percentReturn;
+        if (percentReturn > maxYValue) {
+            maxYValue = percentReturn;
+        }
+    }
+    return maxYValue;
 }

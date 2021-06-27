@@ -3,23 +3,14 @@ var isInputValid = true;
 
 $(document).ready(function () {
     addRow(); //when document loads add one row
-    $(function() {
-        $('input[name="startDate"]').daterangepicker({
-          singleDatePicker: true,
-          showDropdowns: true,
-          minYear: 2000,
-          maxYear: parseInt(moment().format('YYYY'),10)
-        }, 
-        function(start, end, label) {
-          console.log(start, end)
-        });
-      });
 });
 
 function addRow() {
     inputRow = createInputRow();
     $('#stockList').append(inputRow);
     rowNum++;
+    console.log(chartRequested);
+    // adjustChartOnInputChange();
 };
 
 function createInputRow() {
@@ -81,7 +72,7 @@ function createDeleteButton() {
     var button = document.createElement('button');
     button.className = "btn btn-danger btn-sm";
     button.setAttribute("onclick", "this.parentNode.parentNode.remove(); updateTotalPercent();"); //delete row on click
-    button.innerHTML = 'Delete';
+    button.innerHTML = 'x';
     newdiv.appendChild(button);
     return newdiv;
 };
@@ -158,7 +149,7 @@ function updateTotalPercent() {//updates and returns total percent
             totalPercent += parseFloat(percent);
         };
     });
-    $('#total').text(totalPercent);
+    $('#total').text(totalPercent + "%");
     return totalPercent;
 };
 
@@ -222,3 +213,5 @@ function randomStockList(quantity){ //returns unique random stocks
     }
     return randomStocks;
 }
+
+
