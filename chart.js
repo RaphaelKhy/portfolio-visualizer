@@ -26,8 +26,14 @@ async function chartButtonClick() {
   if (isInputValid) {
     await removeChart();
     inputData = collectData();
-    await mainCalc(inputData);
-    displayChart();
+    await calculateReturn(inputData);
+
+    //check if one stock is selected
+    if(storage.length === 2){
+      displayChart(single = true);
+    }else{
+      displayChart(single = false);
+    }
     chartRequested = true;
   }
 }
@@ -35,6 +41,7 @@ async function chartButtonClick() {
 function ValidateInputData() {
   //additional input validation when plot chart button clicked
   inputChange();
+  var stockList = [];
   var totalPercent = 0;
   if (!isInputValid) {
     return;
@@ -58,6 +65,15 @@ function ValidateInputData() {
       } else {
         totalPercent += percent;
       }
+
+      //check if there are duplicate stocks
+      if (stockList.includes(stock) && isInputValid) {
+        displayToast("Duplicate Stock: " + stock);
+        isInputValid = false;
+        return;
+      } else {
+        stockList.push(stock);
+      }
     });
     if (totalPercent != 100 && isInputValid) {
       //test if total percent = 100
@@ -69,7 +85,6 @@ function ValidateInputData() {
 
 function collectData() {
   //collects user input after validation
-
   var data = [];
 
   $('div[id^="stockRow"]').each(function () {
@@ -85,61 +100,94 @@ function collectData() {
   return data;
 }
 
-function displayChart() {
-  //builds and shows chart
-  containerWidth = document
-    .getElementById("chartContainer")
-    .getBoundingClientRect().width; //get width from container
+async function removeChart() {
+  //deletes chart
+  await d3.select("svg").remove();
+}
+
+function getMinYValue() {
+  //gets minimum percent return from mergeStocks stock data
+  var minYValue = 0;
+  data = storage[storage.length - 1].data;
+  for (var day = 0; day < data.length; day++) {
+    percentReturn = data[day].percentReturn;
+    if (percentReturn < minYValue) {
+      minYValue = percentReturn;
+    }
+  }
+  return minYValue;
+}
+
+function displayChart(single) {
+  var minYValue = storage.reduce((prev, curr) =>
+    prev.minValue < curr.minValue ? prev : curr
+  ).minValue;
+  var maxYValue = storage.reduce((prev, curr) =>
+    prev.maxValue > curr.maxValue ? prev : curr
+  ).maxValue;
+
+  documentWidth = document.body.clientWidth;
+
+  inputHeight = document
+  .getElementById("inputContainer")
+  .getBoundingClientRect().height;
+
+  documentHeight = document.documentElement.scrollHeight;
+  chartHeight = (documentHeight - inputHeight) * 0.95;
+
   // set the dimensions and margins of the graph
-  var margin = { top: 10, right: 40, bottom: 30, left: 60 },
-    width = containerWidth - margin.left - margin.right,
-    height = 400 - margin.top - margin.bottom;
+  var margin = { top: 10, right: 50, bottom: 50, left: 60 },
+    axisWidth = documentWidth - margin.left - margin.right,
+    chartWidth = documentWidth - margin.left - margin.right - 70,
+    height = chartHeight - margin.top - margin.bottom;
 
   // append the svg object to the body of the page
   var svg = d3
-    .select("#my_dataviz")
+    .select("#my_dataviz2")
     .append("svg")
-    .attr("width", width + margin.left + margin.right)
+    .attr("width", axisWidth + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
     .append("g")
     .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
-  buildChart(storage[storage.length - 1].data);
+  // Add X axis
+  var x = d3
+    .scaleTime()
+    .domain(
+      d3.extent(storage[0].data, function (d) {
+        return d.date;
+      })
+    )
+    .range([0, chartWidth]);
+  svg
+    .append("g")
+    .attr("transform", "translate(0," + height + ")")
+    .call(d3.axisBottom(x).ticks(5));
 
-  function buildChart(data) {
-    // Add X axis --> it is a date format
-    var x = d3
-      .scaleTime()
-      .domain(
-        d3.extent(data, function (d) {
-          return d.date;
-        })
-      )
-      .range([0, width]);
-    svg
-      .append("g")
-      .attr("transform", "translate(0," + height + ")")
-      .attr("id", "svg-elem")
-      .call(d3.axisBottom(x));
+  // Add Y axis
+  var y = d3.scaleLinear().domain([minYValue, maxYValue]).range([height, 0]);
+  svg.append("g").call(d3.axisLeft(y));
 
-    // Add Y axis
-    var y = d3
-      .scaleLinear()
-      .domain([
-        getMinYValue(),
-        d3.max(data, function (d) {
-          return +d.value;
-        }),
-      ])
-      .range([height, 0]);
-    svg.append("g").call(d3.axisLeft(y));
+  // color palette
+  var stockList = [];
+  for (var i = 0; i < storage.length-1; i++) {
+    stockList.push(storage[i].stock);
+  }
+  //add storage to beginning of stockList
+  stockList.unshift(storage[storage.length-1].stock);
+  var color = d3.scaleOrdinal()
+    .domain(stockList)
+    .range(["#000000", "#0B84A5", "#F6C85F", "#9DD866", "#CA472F", 
+    "#8DDDD0", "#4F3D7A", "#FDAE61", "#F46D43", "#D53E4F", "#9E0142"]);
 
-    // Add the line
+  // Draw the line
+  if(single === true){
+    console.log(single);
     svg
       .append("path")
-      .datum(data)
+      .datum(storage[storage.length-1].data)
       .attr("fill", "none")
-      .attr("stroke", "steelblue")
+      .attr("stroke", "#000000")
       .attr("stroke-width", 1.5)
       .attr(
         "d",
@@ -149,138 +197,81 @@ function displayChart() {
             return x(d.date);
           })
           .y(function (d) {
-            return y(d.value);
+            return y(d.percentReturn);
           })
       );
-
-    // Add the x Axis
+  }else{
     svg
+    .selectAll(".line")
+    .data(storage)
+    .enter()
+    .append("path")
+    .attr("fill", "none")
+    .attr("stroke", function (d) {
+      return color(d.stock);
+    })
+    .attr("stroke-width", 1.5)
+    .attr("d", function (d) {
+      return d3
+        .line()
+        .x(function (d) {
+          return x(d.date);
+        })
+        .y(function (d) {
+          return y(+d.percentReturn);
+        })(d.data);
+    });
+  }
+  
+
+  //show chart if multiple stocks
+  if(single === false){
+    //add the legend
+    var stockLegend = svg
+      .selectAll(".lineLegend")
+      .data(stockList)
+      .enter()
       .append("g")
-      .attr("transform", "translate(0," + height + ")")
-      .call(d3.axisBottom(x));
+      .attr("class", "lineLegend")
+      .attr("transform", function (d, i) {
+        return "translate(" + chartWidth  + "," + i * 20 + ")";
+      });
 
-    // text label for the x axis
-    svg
+    stockLegend
       .append("text")
-      .attr(
-        "transform",
-        "translate(" + width / 2 + " ," + (height + margin.top + 20) + ")"
-      )
-      .style("text-anchor", "middle")
-      .text("Date");
+      .text(function (d) {
+        return d;
+      })
+      .attr("transform", "translate(15,9)"); //align texts with boxes
 
-    // Add the y Axis
-    svg.append("g").call(d3.axisLeft(y));
 
-    // text label for the y axis
-    svg
-      .append("text")
-      .attr("transform", "rotate(-90)")
-      .attr("y", 0 - margin.left)
-      .attr("x", 0 - height / 2)
-      .attr("dy", "1em")
-      .style("text-anchor", "middle")
-      .text("Percent Return");
+    stockLegend
+      .append("rect")
+      .attr("fill", function (d, i) {
+        return color(d);
+      })
+      .attr("width", 10)
+      .attr("height", 10);
   }
+
+  svg
+  .append("text")
+  .attr("transform", "rotate(-90)")
+  .attr("y", 0 - margin.left)
+  .attr("x", 0 - height / 2)
+  .attr("dy", "1em")
+  .style("text-anchor", "middle")
+  .text("% Return");
+  
 }
 
-async function removeChart() {
-  //deletes chart
-  await d3.select("svg").remove();
-}
-
-function testDisplayChart() {
-  //display chart for testing
-  containerWidth = document
-    .getElementById("chartContainer")
-    .getBoundingClientRect().width; //get width of container
-  // set the dimensions and margins of the graph
-  var margin = { top: 10, right: 30, bottom: 30, left: 30 },
-    width = containerWidth * 0.9 - margin.left - margin.right,
-    height = 400 - margin.top - margin.bottom;
-
-  // append the svg object to the body of the page
-  var svg = d3
-    .select("#my_dataviz")
-    .append("svg")
-    .attr("width", width + margin.left + margin.right)
-    .attr("height", height + margin.top + margin.bottom)
-    .append("g")
-    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
-
-  //Read the data
-  csvPath2 = "data/test.csv";
-  d3.csv(
-    csvPath2,
-
-    // When reading the csv, I must format variables:
-    function (d) {
-      // console.log(d);
-      var g = { date: d3.timeParse("%m/%d/%Y")(d.date), value: d.value };
-      // console.log(g);
-      return g;
-    },
-
-    // Now I can use this dataset:
-    function (data) {
-      // console.log(data);
-      // Add X axis --> it is a date format
-      var x = d3
-        .scaleTime()
-        .domain(
-          d3.extent(data, function (d) {
-            return d.date;
-          })
-        )
-        .range([0, width]);
-      svg
-        .append("g")
-        .attr("transform", "translate(0," + height + ")")
-        .call(d3.axisBottom(x));
-
-      // Add Y axis
-      var y = d3
-        .scaleLinear()
-        .domain([
-          0,
-          d3.max(data, function (d) {
-            return +d.value;
-          }),
-        ])
-        .range([height, 0]);
-      svg.append("g").call(d3.axisLeft(y));
-
-      // Add the line
-      svg
-        .append("path")
-        .datum(data)
-        .attr("fill", "none")
-        .attr("stroke", "steelblue")
-        .attr("stroke-width", 1.5)
-        .attr(
-          "d",
-          d3
-            .line()
-            .x(function (d) {
-              return x(d.date);
-            })
-            .y(function (d) {
-              return y(d.value);
-            })
-        );
-    }
-  );
-}
-
-function getMinYValue() {
-  //gets minimum percent return from mergeStocks stock data
-  var minYValue = 0;
-  data = storage[storage.length - 1].data;
-  for (var day = 0; day < data.length; day++) {
-    value = data[day].value;
-    if (value < minYValue) {
-      minYValue = value;
-    }
-  }
-  return minYValue;
-}
+// async function adjustChartOnInputChange(){
+//   if(chartRequested === true){
+//     await removeChart();
+//     if(storage.length === 2){
+//       displayChart(single = true);
+//     }else{
+//       displayChart(single = false);
+//     }
+//   }
+// }

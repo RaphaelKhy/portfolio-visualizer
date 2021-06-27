@@ -20,9 +20,7 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
-    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
+    <link rel="stylesheet", type="text/css" href = "dark.css">
 </head>
 
 <body>
@@ -31,25 +29,30 @@
         <div id='stockList'>
             <div class="row ">
                 <div class="col-4">
-                    <p class="font-weight-bold">Stock</p>
+                    <p class="font-weight-bold sv__mode">Stock</p>
                 </div>
-                <div class="col-8">
-                    <p class="font-weight-bold">Percent Allocation</p>
+                <div class="col-4">
+                    <p class="font-weight-bold sv__mode">Percent Allocation</p>
+                </div>
+                <div class="col-4 ">
+                    <button onclick="addRow();" type="button" class="btn btn-success btn-sm">Add</button>
+                    <button type="button" onclick="randomButtonClick();" class="btn btn-info btn-sm">Random</button>
                 </div>
             </div>
         </div>
         <div class="row ">
-            <div class="col-4 offset-4 ">
-                <div class="alert alert-primary p-1" role="alert">
-                    Total: <span id="total"></span>
+            <!-- <div class="col-4">
+                <div class="input-group input-group-sm mb-3">
+                    <input type="text" class="form-control"></input>
+                    <div class="input-group-append">
+                        <span class="input-group-text" id="inputGroup-sizing-sm"
+                            style="background-color: rgb(182, 72, 255);"
+                            aria-label="Small" aria-describedby="inputGroup-sizing-sm">&nbsp;
+                        </span>
+                    </div>
                 </div>
-            </div>
-            <div class="col-4 ">
-                <button onclick="addRow();" type="button" class="btn btn-light btn-sm">Add New</button>
-            </div>
-        </div>
+            </div> -->
 
-        <div class="row">
             <div class="col-4 ">
                 <select class="form-select form-select-sm" id="Time" aria-label=".form-select-sm example">
                     <option selected>Max Available</option>
@@ -58,18 +61,27 @@
                     <option value="3">2 years</option>
                 </select>
             </div>
-            <div class="col-4 text-center">
-                <button type="button" onclick="randomButtonClick();" class="btn btn-info btn-sm">Random Input</button>
+
+            <div class="col-4">
+                <div class="alert alert-primary p-1" role="alert">
+                    Total: <span id="total"></span>
+                </div>
             </div>
             <div class="col-4">
-                <button type="button" onclick="chartButtonClick();" class="btn btn-success btn-sm"> Plot chart</button>
+                <button type="button" onclick="chartButtonClick();" class="btn btn-primary btn-sm"> Plot chart</button>
             </div>
         </div>
+
     </div>
+
 
     <!-- chart -->
     <div class="container" id="chartContainer">
         <div class="centered" id="my_dataviz"></div>
+    </div>
+
+    <div id="chartContainer2">
+        <div class="centered" id="my_dataviz2"></div>
     </div>
 
     <script type='text/javascript' src="chart.js"></script>
@@ -78,3 +90,9 @@
 </body>
 
 </html>
+
+<!-- 
+1. Charts for each stock selected with unique color legend
+2. Report with max drawdown, total return, return for each stock
+3. Add more stocks
+ -->
