@@ -9,7 +9,6 @@ function addRow() {
     inputRow = createInputRow();
     $('#stockList').append(inputRow);
     rowNum++;
-    console.log(chartRequested);
     // adjustChartOnInputChange();
 };
 
@@ -28,7 +27,7 @@ function createInputRow() {
 
 function createStockInputElement() {
     var newDiv = document.createElement('div');
-    newDiv.className = "col-4";
+    newDiv.className = "col-3";
     var input = document.createElement('input');
     input.id = rowNum;
     input.type = "text";
@@ -53,7 +52,7 @@ function createStockInputElement() {
 
 function createPercentInputElement() {
     var newdiv = document.createElement('div');
-    newdiv.className = "col-4";
+    newdiv.className = "col-3";
     var input = document.createElement('input');
     input.type = "number";
     input.min = "0";
@@ -70,9 +69,9 @@ function createDeleteButton() {
     var newdiv = document.createElement('div');
     newdiv.className = "col-4";
     var button = document.createElement('button');
-    button.className = "btn btn-danger btn-sm";
+    button.className = "btn btn-outline-danger btn-sm";
     button.setAttribute("onclick", "this.parentNode.parentNode.remove(); updateTotalPercent();"); //delete row on click
-    button.innerHTML = 'x';
+    button.innerHTML = '×';
     newdiv.appendChild(button);
     return newdiv;
 };

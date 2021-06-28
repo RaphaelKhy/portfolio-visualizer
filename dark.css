@@ -4,3 +4,7 @@ body{
 .sv__mode{
     color: black;
 }
+
+.row {
+    --bs-gutter-x: 0.5rem;
+}

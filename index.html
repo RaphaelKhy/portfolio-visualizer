@@ -20,60 +20,53 @@
     <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/toastify-js"></script>
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
     <script type="text/javascript" src="https://cdn.jsdelivr.net/jquery/latest/jquery.min.js"></script>
-    <link rel="stylesheet", type="text/css" href = "dark.css">
+    <link rel="stylesheet" , type="text/css" href="dark.css">
 </head>
 
 <body>
     <!-- inputs -->
-    <div class="container" id="inputContainer" style="max-width: 600px">
-        <div id='stockList'>
-            <div class="row ">
-                <div class="col-4">
+    <div class = "sv__ui_block">
+        <div class="container" style="max-width: 600px">
+            <div class="row">
+                <div class="col-3">
                     <p class="font-weight-bold sv__mode">Stock</p>
                 </div>
                 <div class="col-4">
                     <p class="font-weight-bold sv__mode">Percent Allocation</p>
                 </div>
-                <div class="col-4 ">
-                    <button onclick="addRow();" type="button" class="btn btn-success btn-sm">Add</button>
-                    <button type="button" onclick="randomButtonClick();" class="btn btn-info btn-sm">Random</button>
+                <div class="col-5 ">
+                    <button onclick="addRow();" type="button" class="btn btn-outline-success btn-sm">Add</button>
+                    <button type="button" onclick="randomButtonClick();"
+                        class="btn btn-outline-info btn-sm">Random</button>
                 </div>
             </div>
         </div>
-        <div class="row ">
-            <!-- <div class="col-4">
-                <div class="input-group input-group-sm mb-3">
-                    <input type="text" class="form-control"></input>
-                    <div class="input-group-append">
-                        <span class="input-group-text" id="inputGroup-sizing-sm"
-                            style="background-color: rgb(182, 72, 255);"
-                            aria-label="Small" aria-describedby="inputGroup-sizing-sm">&nbsp;
-                        </span>
+
+        <div class="container" id="stockList" style="max-width: 600px"></div>
+
+        <div class="container" style="max-width: 600px">
+            <div class="row ">
+                <div class="col-3 ">
+                    <select class="form-select form-select-sm" id="Time" aria-label=".form-select-sm example">
+                        <option selected>Max Available</option>
+                        <option value="1">6 months</option>
+                        <option value="2">1 year</option>
+                        <option value="3">2 years</option>
+                    </select>
+                </div>
+
+                <div class="col-3">
+                    <div class="alert alert-primary p-1" role="alert">
+                        Total: <span id="total"></span>
                     </div>
                 </div>
-            </div> -->
-
-            <div class="col-4 ">
-                <select class="form-select form-select-sm" id="Time" aria-label=".form-select-sm example">
-                    <option selected>Max Available</option>
-                    <option value="1">6 months</option>
-                    <option value="2">1 year</option>
-                    <option value="3">2 years</option>
-                </select>
-            </div>
-
-            <div class="col-4">
-                <div class="alert alert-primary p-1" role="alert">
-                    Total: <span id="total"></span>
+                <div class="col-4">
+                    <button type="button" onclick="chartButtonClick();" class="btn btn-primary btn-sm"> Plot
+                        chart</button>
                 </div>
             </div>
-            <div class="col-4">
-                <button type="button" onclick="chartButtonClick();" class="btn btn-primary btn-sm"> Plot chart</button>
-            </div>
         </div>
-
     </div>
-
 
     <!-- chart -->
     <div class="container" id="chartContainer">
