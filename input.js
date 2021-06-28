@@ -118,11 +118,6 @@ function keyUpUpperCase(obj) {
 };
 
 function displayToast(message) {
-    //find x offset
-    var windowWidth = document.body.clientWidth;
-    var containerWidth = document.getElementById('inputContainer').getBoundingClientRect().width;
-    xOffset = (windowWidth - containerWidth) / 2;
-
     Toastify({
         text: message,
         duration: 1500,
@@ -131,7 +126,6 @@ function displayToast(message) {
         position: 'right',
         close: true,
         backgroundColor: "#DB3549",
-        offset: { x: xOffset },
 
     }).showToast();
 };
@@ -212,5 +206,3 @@ function randomStockList(quantity){ //returns unique random stocks
     }
     return randomStocks;
 }
-
-

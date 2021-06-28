@@ -60,21 +60,20 @@
                         Total: <span id="total"></span>
                     </div>
                 </div>
-                <div class="col-4">
-                    <button type="button" onclick="chartButtonClick();" class="btn btn-primary btn-sm"> Plot
-                        chart</button>
+                <div class="col-6">
+                    <button type="button" onclick="chartButtonClick();" class="btn btn-primary btn-sm"> Plot chart</button>
+                    <div class="form-check form-switch">
+                        <input class="form-check-input cv__chart_toggle" type="checkbox" id="flexSwitchCheckDefault" onclick = "chartToggle();">
+                        <label class="form-check-label" for="flexSwitchCheckDefault">Show All</label>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- chart -->
-    <div class="container" id="chartContainer">
+    <div id="chartContainer">
         <div class="centered" id="my_dataviz"></div>
-    </div>
-
-    <div id="chartContainer2">
-        <div class="centered" id="my_dataviz2"></div>
     </div>
 
     <script type='text/javascript' src="chart.js"></script>
@@ -83,9 +82,3 @@
 </body>
 
 </html>
-
-<!-- 
-1. Charts for each stock selected with unique color legend
-2. Report with max drawdown, total return, return for each stock
-3. Add more stocks
- -->
