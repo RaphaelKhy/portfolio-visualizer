@@ -9,13 +9,12 @@ function addRow() {
     inputRow = createInputRow();
     $('#stockList').append(inputRow);
     rowNum++;
-    console.log(chartRequested);
     // adjustChartOnInputChange();
 };
 
 function createInputRow() {
     var newdiv = document.createElement('div'); //create div
-    newdiv.className = "row";
+    newdiv.className = "row sv__bottom_buffer";
     newdiv.id = "stockRow" + rowNum;
     var stockInput = createStockInputElement();
     var percentInput = createPercentInputElement();
@@ -28,11 +27,11 @@ function createInputRow() {
 
 function createStockInputElement() {
     var newDiv = document.createElement('div');
-    newDiv.className = "col-4";
+    newDiv.className = "col-3";
     var input = document.createElement('input');
     input.id = rowNum;
     input.type = "text";
-    input.className = "form-control"
+    input.className = "form-control sv__input_padding"
     input.setAttribute("list", "tickers");
     input.setAttribute("onchange", "inputChange();");
     input.setAttribute('onkeyup', "keyUpUpperCase(this);");
@@ -53,13 +52,13 @@ function createStockInputElement() {
 
 function createPercentInputElement() {
     var newdiv = document.createElement('div');
-    newdiv.className = "col-4";
+    newdiv.className = "col-3";
     var input = document.createElement('input');
     input.type = "number";
     input.min = "0";
     input.max = "100";
     input.placeholder = "%";
-    input.className = "form-control percent";
+    input.className = "form-control percent sv__input_padding";
     input.setAttribute("onchange", "inputChange();");
 
     newdiv.appendChild(input);
@@ -70,9 +69,9 @@ function createDeleteButton() {
     var newdiv = document.createElement('div');
     newdiv.className = "col-4";
     var button = document.createElement('button');
-    button.className = "btn btn-danger btn-sm";
+    button.className = "btn btn-outline-danger btn-sm";
     button.setAttribute("onclick", "this.parentNode.parentNode.remove(); updateTotalPercent();"); //delete row on click
-    button.innerHTML = 'x';
+    button.innerHTML = '×';
     newdiv.appendChild(button);
     return newdiv;
 };

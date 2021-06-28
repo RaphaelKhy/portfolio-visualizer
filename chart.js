@@ -24,7 +24,7 @@ const acceptedStocks = [
 $(window).on("resize", function () {
   if (chartRequested) {
     removeChart();
-    displayChart();
+    adjustChartOnResize();
   }
 });
 
@@ -135,9 +135,7 @@ function displayChart(single) {
 
   documentWidth = document.body.clientWidth;
 
-  inputHeight = document
-  .getElementById("inputContainer")
-  .getBoundingClientRect().height;
+  inputHeight = document.getElementsByClassName("sv__ui_block")[0].clientHeight;
 
   documentHeight = document.documentElement.scrollHeight;
   chartHeight = Math.min((documentWidth * 0.6), (documentHeight - inputHeight));
@@ -189,7 +187,6 @@ function displayChart(single) {
 
   // Draw the line
   if(single === true){
-    console.log(single);
     svg
       .append("path")
       .datum(storage[storage.length-1].data)
@@ -272,13 +269,13 @@ function displayChart(single) {
   
 }
 
-// async function adjustChartOnInputChange(){
-//   if(chartRequested === true){
-//     await removeChart();
-//     if(storage.length === 2){
-//       displayChart(single = true);
-//     }else{
-//       displayChart(single = false);
-//     }
-//   }
-// }
+async function adjustChartOnResize(){
+  if(chartRequested === true){
+    await removeChart();
+    if(storage.length === 2){
+      displayChart(single = true);
+    }else{
+      displayChart(single = false);
+    }
+  }
+}
