@@ -1,11 +1,18 @@
 var chartRequested = false;
 const acceptedStocks = [
   "AAPL",
+  "ABBV",
   "BA",
   "BABA",
   "BAC",
+  "CAT",
+  "DUK",
   "GLD",
+  "GS",
   "IWM",
+  "K",
+  "MCD",
+  "MMM",
   "QQQ",
   "SLV",
   "SPY",
@@ -133,10 +140,10 @@ function displayChart(single) {
   .getBoundingClientRect().height;
 
   documentHeight = document.documentElement.scrollHeight;
-  chartHeight = (documentHeight - inputHeight) * 0.95;
+  chartHeight = Math.min((documentWidth * 0.6), (documentHeight - inputHeight));
 
   // set the dimensions and margins of the graph
-  var margin = { top: 10, right: 50, bottom: 50, left: 60 },
+  var margin = { top: 10, right: 30, bottom: 50, left: 60 },
     axisWidth = documentWidth - margin.left - margin.right,
     chartWidth = documentWidth - margin.left - margin.right - 70,
     height = chartHeight - margin.top - margin.bottom;
