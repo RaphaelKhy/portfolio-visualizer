@@ -1,4 +1,5 @@
 var chartRequested = false;
+var showAll = false;
 const acceptedStocks = [
   "AAPL",
   "ABBV",
@@ -36,10 +37,10 @@ async function chartButtonClick() {
     await calculateReturn(inputData);
 
     //check if one stock is selected
-    if(storage.length === 2){
-      displayChart(single = true);
-    }else{
-      displayChart(single = false);
+    if (storage.length === 2) {
+      displayChart();
+    } else {
+      displayChart();
     }
     chartRequested = true;
   }
@@ -125,7 +126,7 @@ function getMinYValue() {
   return minYValue;
 }
 
-function displayChart(single) {
+function displayChart() {
   var minYValue = storage.reduce((prev, curr) =>
     prev.minValue < curr.minValue ? prev : curr
   ).minValue;
@@ -133,12 +134,12 @@ function displayChart(single) {
     prev.maxValue > curr.maxValue ? prev : curr
   ).maxValue;
 
-  documentWidth = document.body.clientWidth;
+  documentWidth = document.body.clientWidth * 0.99;
 
   inputHeight = document.getElementsByClassName("sv__ui_block")[0].clientHeight;
 
   documentHeight = document.documentElement.scrollHeight;
-  chartHeight = Math.min((documentWidth * 0.6), (documentHeight - inputHeight));
+  chartHeight = Math.min(documentWidth * 0.6, documentHeight - inputHeight);
 
   // set the dimensions and margins of the graph
   var margin = { top: 10, right: 30, bottom: 50, left: 60 },
@@ -148,7 +149,7 @@ function displayChart(single) {
 
   // append the svg object to the body of the page
   var svg = d3
-    .select("#my_dataviz2")
+    .select("#my_dataviz")
     .append("svg")
     .attr("width", axisWidth + margin.left + margin.right)
     .attr("height", height + margin.top + margin.bottom)
@@ -175,21 +176,33 @@ function displayChart(single) {
 
   // color palette
   var stockList = [];
-  for (var i = 0; i < storage.length-1; i++) {
+  for (var i = 0; i < storage.length - 1; i++) {
     stockList.push(storage[i].stock);
   }
   //add storage to beginning of stockList
-  stockList.unshift(storage[storage.length-1].stock);
-  var color = d3.scaleOrdinal()
+  stockList.unshift(storage[storage.length - 1].stock);
+  var color = d3
+    .scaleOrdinal()
     .domain(stockList)
-    .range(["#000000", "#0B84A5", "#F6C85F", "#9DD866", "#CA472F", 
-    "#8DDDD0", "#4F3D7A", "#FDAE61", "#F46D43", "#D53E4F", "#9E0142"]);
+    .range([
+      "#000000",
+      "#0B84A5",
+      "#F6C85F",
+      "#9DD866",
+      "#CA472F",
+      "#8DDDD0",
+      "#4F3D7A",
+      "#FDAE61",
+      "#F46D43",
+      "#D53E4F",
+      "#9E0142",
+    ]);
 
   // Draw the line
-  if(single === true){
+  if (showAll === false) {
     svg
       .append("path")
-      .datum(storage[storage.length-1].data)
+      .datum(storage[storage.length - 1].data)
       .attr("fill", "none")
       .attr("stroke", "#000000")
       .attr("stroke-width", 1.5)
@@ -204,32 +217,31 @@ function displayChart(single) {
             return y(d.percentReturn);
           })
       );
-  }else{
+  } else {
     svg
-    .selectAll(".line")
-    .data(storage)
-    .enter()
-    .append("path")
-    .attr("fill", "none")
-    .attr("stroke", function (d) {
-      return color(d.stock);
-    })
-    .attr("stroke-width", 1.5)
-    .attr("d", function (d) {
-      return d3
-        .line()
-        .x(function (d) {
-          return x(d.date);
-        })
-        .y(function (d) {
-          return y(+d.percentReturn);
-        })(d.data);
-    });
+      .selectAll(".line")
+      .data(storage)
+      .enter()
+      .append("path")
+      .attr("fill", "none")
+      .attr("stroke", function (d) {
+        return color(d.stock);
+      })
+      .attr("stroke-width", 1.5)
+      .attr("d", function (d) {
+        return d3
+          .line()
+          .x(function (d) {
+            return x(d.date);
+          })
+          .y(function (d) {
+            return y(+d.percentReturn);
+          })(d.data);
+      });
   }
-  
 
   //show chart if multiple stocks
-  if(single === false){
+  if (showAll === true) {
     //add the legend
     var stockLegend = svg
       .selectAll(".lineLegend")
@@ -238,7 +250,7 @@ function displayChart(single) {
       .append("g")
       .attr("class", "lineLegend")
       .attr("transform", function (d, i) {
-        return "translate(" + chartWidth  + "," + i * 20 + ")";
+        return "translate(" + chartWidth + "," + i * 20 + ")";
       });
 
     stockLegend
@@ -247,7 +259,6 @@ function displayChart(single) {
         return d;
       })
       .attr("transform", "translate(15,9)"); //align texts with boxes
-
 
     stockLegend
       .append("rect")
@@ -259,23 +270,31 @@ function displayChart(single) {
   }
 
   svg
-  .append("text")
-  .attr("transform", "rotate(-90)")
-  .attr("y", 0 - margin.left)
-  .attr("x", 0 - height / 2)
-  .attr("dy", "1em")
-  .style("text-anchor", "middle")
-  .text("% Return");
-  
+    .append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 0 - margin.left)
+    .attr("x", 0 - height / 2)
+    .attr("dy", "1em")
+    .style("text-anchor", "middle")
+    .text("% Return");
 }
 
-async function adjustChartOnResize(){
-  if(chartRequested === true){
+async function adjustChartOnResize() {
+  if (chartRequested === true) {
     await removeChart();
-    if(storage.length === 2){
-      displayChart(single = true);
-    }else{
-      displayChart(single = false);
+    if (storage.length === 2) {
+      displayChart((single = true));
+    } else {
+      displayChart((single = false));
     }
   }
+}
+
+function chartToggle() {
+  if (document.getElementsByClassName("cv__chart_toggle")[0].checked) {
+    showAll = true;
+  } else {
+    showAll = false;
+  }
+  chartButtonClick();
 }
