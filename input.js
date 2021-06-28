@@ -14,7 +14,7 @@ function addRow() {
 
 function createInputRow() {
     var newdiv = document.createElement('div'); //create div
-    newdiv.className = "row";
+    newdiv.className = "row sv__bottom_buffer";
     newdiv.id = "stockRow" + rowNum;
     var stockInput = createStockInputElement();
     var percentInput = createPercentInputElement();
@@ -31,7 +31,7 @@ function createStockInputElement() {
     var input = document.createElement('input');
     input.id = rowNum;
     input.type = "text";
-    input.className = "form-control"
+    input.className = "form-control sv__input_padding"
     input.setAttribute("list", "tickers");
     input.setAttribute("onchange", "inputChange();");
     input.setAttribute('onkeyup', "keyUpUpperCase(this);");
@@ -58,7 +58,7 @@ function createPercentInputElement() {
     input.min = "0";
     input.max = "100";
     input.placeholder = "%";
-    input.className = "form-control percent";
+    input.className = "form-control percent sv__input_padding";
     input.setAttribute("onchange", "inputChange();");
 
     newdiv.appendChild(input);
