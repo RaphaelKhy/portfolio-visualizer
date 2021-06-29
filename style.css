@@ -1,0 +1,12 @@
+.row {
+  --bs-gutter-x: 0.5rem;
+}
+
+.sv__bottom_buffer {
+  margin-bottom: 2px;
+  padding: 0px;
+}
+
+.sv__input_padding {
+  padding: 3px 6px 3px 6px;
+}

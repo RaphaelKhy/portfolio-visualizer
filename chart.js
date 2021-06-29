@@ -35,11 +35,9 @@ async function chartButtonClick() {
     await removeChart();
     inputData = collectData();
     await calculateReturn(inputData);
-
-    //check if one stock is selected
-    if (storage.length === 2) {
-      displayChart();
-    } else {
+    if(darkMode === true){
+      displayChartDarkMode();
+    }else{
       displayChart();
     }
     chartRequested = true;
@@ -282,10 +280,10 @@ function displayChart() {
 async function adjustChartOnResize() {
   if (chartRequested === true) {
     await removeChart();
-    if (storage.length === 2) {
-      displayChart((single = true));
-    } else {
-      displayChart((single = false));
+    if(darkMode === true){
+      displayChartDarkMode();
+    }else{
+      displayChart();
     }
   }
 }
@@ -297,4 +295,169 @@ function chartToggle() {
     showAll = false;
   }
   chartButtonClick();
+}
+
+function displayChartDarkMode() {
+  var minYValue = storage.reduce((prev, curr) =>
+    prev.minValue < curr.minValue ? prev : curr
+  ).minValue;
+  var maxYValue = storage.reduce((prev, curr) =>
+    prev.maxValue > curr.maxValue ? prev : curr
+  ).maxValue;
+
+  documentWidth = document.body.clientWidth * 0.99;
+
+  inputHeight = document.getElementsByClassName("sv__ui_block")[0].clientHeight;
+
+  documentHeight = document.documentElement.scrollHeight;
+  chartHeight = Math.min(documentWidth * 0.6, documentHeight - inputHeight);
+
+  // set the dimensions and margins of the graph
+  var margin = { top: 10, right: 30, bottom: 50, left: 60 },
+    axisWidth = documentWidth - margin.left - margin.right,
+    chartWidth = documentWidth - margin.left - margin.right - 70,
+    height = chartHeight - margin.top - margin.bottom;
+
+  // append the svg object to the body of the page
+  var svg = d3
+    .select("#my_dataviz")
+    .append("svg")
+    .attr("width", axisWidth + margin.left + margin.right)
+    .attr("height", height + margin.top + margin.bottom)
+    .append("g")
+    .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
+
+  // Add X axis
+  var x = d3
+    .scaleTime()
+    .domain(
+      d3.extent(storage[0].data, function (d) {
+        return d.date;
+      })
+    )
+    .range([0, chartWidth]);
+  svg
+    .append("g")
+    .attr("transform", "translate(0," + height + ")")
+    .call(d3.axisBottom(x).ticks(5));
+
+  // Add Y axis
+  var y = d3.scaleLinear().domain([minYValue, maxYValue]).range([height, 0]);
+  svg.append("g").call(d3.axisLeft(y));
+
+  // color palette
+  var stockList = [];
+  for (var i = 0; i < storage.length - 1; i++) {
+    stockList.push(storage[i].stock);
+  }
+  //add storage to beginning of stockList
+  stockList.unshift(storage[storage.length - 1].stock);
+  var color = d3
+    .scaleOrdinal()
+    .domain(stockList)
+    .range([
+      "#FFFFFF",
+      "#0B84A5",
+      "#F6C85F",
+      "#9DD866",
+      "#CA472F",
+      "#8DDDD0",
+      "#4F3D7A",
+      "#FDAE61",
+      "#F46D43",
+      "#D53E4F",
+      "#9E0142",
+    ]);
+
+  // Draw the line
+  if (showAll === false) {
+    svg
+      .append("path")
+      .datum(storage[storage.length - 1].data)
+      .attr("fill", "none")
+      .attr("stroke", "#FFFFFF")
+      .attr("stroke-width", 1.5)
+      .attr(
+        "d",
+        d3
+          .line()
+          .x(function (d) {
+            return x(d.date);
+          })
+          .y(function (d) {
+            return y(d.percentReturn);
+          })
+      );
+  } else {
+    svg
+      .selectAll(".line")
+      .data(storage)
+      .enter()
+      .append("path")
+      .attr("fill", "none")
+      .attr("stroke", function (d) {
+        return color(d.stock);
+      })
+      .attr("stroke-width", 1.5)
+      .attr("d", function (d) {
+        return d3
+          .line()
+          .x(function (d) {
+            return x(d.date);
+          })
+          .y(function (d) {
+            return y(+d.percentReturn);
+          })(d.data);
+      });
+  }
+
+  //show chart if multiple stocks
+  if (showAll === true) {
+    //add the legend
+    var stockLegend = svg
+      .selectAll(".lineLegend")
+      .data(stockList)
+      .enter()
+      .append("g")
+      .style("fill", "white")
+      .attr("class", "lineLegend")
+      .attr("transform", function (d, i) {
+        return "translate(" + chartWidth + "," + i * 20 + ")";
+      });
+
+    stockLegend
+      .append("text")
+      .text(function (d) {
+        return d;
+      })
+      .attr("transform", "translate(15,9)"); //align texts with boxes
+
+    stockLegend
+      .append("rect")
+      .attr("fill", function (d, i) {
+        return color(d);
+      })
+      .attr("width", 10)
+      .attr("height", 10);
+  }
+
+  svg
+    .append("text")
+    .attr("transform", "rotate(-90)")
+    .attr("y", 0 - margin.left)
+    .attr("x", 0 - height / 2)
+    .attr("dy", "1em")
+    .style("text-anchor", "middle")
+    .text("% Return");
+
+  svg
+    .selectAll("text")
+    .styles({ fill: "#FFFFFF" });
+  svg
+  .selectAll("line")
+  .styles({ stroke: "#FFFFFF" });
+
+  //set axis to white
+  document.querySelector("#my_dataviz > svg > g > g:nth-child(1) > path").style.stroke = "white";
+  document.querySelector("#my_dataviz > svg > g > g:nth-child(2) > path").style.stroke = "white";
 }
