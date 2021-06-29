@@ -35,7 +35,11 @@ async function chartButtonClick() {
     await removeChart();
     inputData = collectData();
     await calculateReturn(inputData);
-    displayChartDarkMode();
+    if(darkMode === true){
+      displayChartDarkMode();
+    }else{
+      displayChart();
+    }
     chartRequested = true;
   }
 }
@@ -276,7 +280,11 @@ function displayChart() {
 async function adjustChartOnResize() {
   if (chartRequested === true) {
     await removeChart();
-    displayChartDarkMode();
+    if(darkMode === true){
+      displayChartDarkMode();
+    }else{
+      displayChart();
+    }
   }
 }
 
@@ -448,7 +456,6 @@ function displayChartDarkMode() {
   svg
   .selectAll("line")
   .styles({ stroke: "#FFFFFF" });
-
 
   //set axis to white
   document.querySelector("#my_dataviz > svg > g > g:nth-child(1) > path").style.stroke = "white";
