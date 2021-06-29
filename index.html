@@ -25,7 +25,6 @@
         integrity="sha384-SZXxX4whJ79/gErwcOYf+zWLeJdY/qpuqC4cAa9rOGUstPomtqpuNWT9wdPEn2fk" crossorigin="anonymous" />
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css"
         integrity="sha384-SZXxX4whJ79/gErwcOYf+zWLeJdY/qpuqC4cAa9rOGUstPomtqpuNWT9wdPEn2fk" crossorigin="anonymous" />
-    <link rel="stylesheet" , type="text/css" href="style.css" />
 </head>
 
 <body>
@@ -48,9 +47,9 @@
                     </button>
                 </div>
                 <div class="form-check form-switch col-3">
-                    <input class="form-check-input cv__dark_theme_toggle" type="checkbox" id="flexSwitchCheckDefault"
+                    <input class="form-check-input cv__dark_theme_toggle" type="checkbox" id="flexSwitchCheckDarkMode"
                         onclick="darkThemeToggle();" />
-                    <label class="form-check-label" for="flexSwitchCheckDefault"><i class="fas fa-moon"></i></label>
+                    <label class="form-check-label" for="flexSwitchCheckDarkMode"><i class="fas fa-moon"></i></label>
                 </div>
             </div>
         </div>
@@ -72,15 +71,15 @@
                         Total: <span id="total"></span>
                     </div>
                 </div>
-                <div class="col-6">
+                <div class="col-2">
                     <button type="button" onclick="chartButtonClick();" class="btn btn-primary btn-sm">
                         Plot chart
                     </button>
-                    <div class="form-check form-switch">
-                        <input class="form-check-input cv__chart_toggle" type="checkbox" id="flexSwitchCheckDefault"
-                            onclick="chartToggle();" />
-                        <label class="form-check-label" for="flexSwitchCheckDefault">Show All</label>
-                    </div>
+                </div>
+                <div class="form-check form-switch col-3">
+                    <input class="form-check-input cv__chart_toggle" type="checkbox" id="flexSwitchCheckDefault"
+                        onclick="chartToggle();" />
+                    <label class="form-check-label" for="flexSwitchCheckDefault">Show All</label>
                 </div>
             </div>
         </div>
@@ -91,6 +90,7 @@
         <div class="centered" id="my_dataviz"></div>
     </div>
 
+    <link rel="stylesheet" , type="text/css" href="style.css" /><link rel="stylesheet" , type="text/css" href="style.css" />
     <script type="text/javascript" src="chart.js"></script>
     <script type="text/javascript" src="input.js"></script>
     <script type="text/javascript" src="calculateReturn.js"></script>
