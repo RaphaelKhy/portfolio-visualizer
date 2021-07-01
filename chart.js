@@ -82,7 +82,7 @@ function ValidateInputData() {
       }
     });
     if (totalPercent != 100 && isInputValid) {
-      //test if total percent = 100
+      //check if total percent = 100
       displayToast("Total percent must be equal to 100");
       isInputValid = false;
     }
