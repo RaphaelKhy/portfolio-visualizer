@@ -1,7 +1,6 @@
 var storage=[];
 
 async function calculateReturn(userInput){
-    var selectedTime = $('#Time option:selected').text();
     storage = userInput;
     
     for(var position = 0; position < storage.length; position++){
