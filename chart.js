@@ -1,3 +1,4 @@
+var selectedTime = "Max Available"
 var chartRequested = false;
 var showAll = false;
 const acceptedStocks = [
@@ -82,7 +83,7 @@ function ValidateInputData() {
       }
     });
     if (totalPercent != 100 && isInputValid) {
-      //test if total percent = 100
+      //check if total percent = 100
       displayToast("Total percent must be equal to 100");
       isInputValid = false;
     }
@@ -460,4 +461,12 @@ function displayChartDarkMode() {
   //set axis to white
   document.querySelector("#my_dataviz > svg > g > g:nth-child(1) > path").style.stroke = "white";
   document.querySelector("#my_dataviz > svg > g > g:nth-child(2) > path").style.stroke = "white";
+}
+
+function timeChange(){
+  var updatedTime = $('#Time option:selected').text();
+  if(updatedTime != selectedTime){
+    selectedTime = updatedTime;
+    chartButtonClick();
+  }
 }

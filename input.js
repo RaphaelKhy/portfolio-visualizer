@@ -9,7 +9,6 @@ function addRow() {
     inputRow = createInputRow();
     $('#stockList').append(inputRow);
     rowNum++;
-    // adjustChartOnInputChange();
 };
 
 function createInputRow() {
@@ -148,6 +147,13 @@ function updateTotalPercent() {//updates and returns total percent
 
 function randomButtonClick() {
     var rowCount = getRowCount();
+
+    //test if number of rows exceeds available stocks
+    if(rowCount > acceptedStocks.length){
+        displayToast("Too many stocks requested");
+        return;
+    }
+
     var percentList = randomPercentList(rowCount, 100);
     var stockList = randomStockList(rowCount);
     var percentListIndex = 0;
