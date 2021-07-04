@@ -9,9 +9,6 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
         crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.1/dist/js/bootstrap.bundle.min.js"
-        integrity="sha384-gtEjrD/SeCtmISkJkNUaaKMoLD0//ElJ19smozuHV6z3Iehds+3Ulb9Bn9Plx0x4"
-        crossorigin="anonymous"></script>
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery-csv/1.0.21/jquery.csv.min.js"
         integrity="sha512-Y8iWYJDo6HiTo5xtml1g4QqHtl/PO1w+dmUpQfQSOTqKNsMhExfyPN2ncNAe9JuJUSKzwK/b6oaNPop4MXzkwg=="
@@ -30,59 +27,117 @@
 <body>
     <!-- inputs -->
     <div class="sv__ui_block">
-        <div class="container" style="max-width: 600px">
-            <div class="row">
-                <div class="col-3">
-                    <p class="font-weight-bold sv__mode">Stock</p>
-                </div>
-                <div class="col-3">
-                    <p class="font-weight-bold sv__mode">Percent Allocation</p>
-                </div>
-                <div class="col-3">
-                    <button onclick="addRow();" type="button" class="btn btn-outline-success btn-sm">
-                        Add
-                    </button>
-                    <button type="button" onclick="randomButtonClick();" class="btn btn-outline-info btn-sm">
-                        Random
-                    </button>
-                </div>
-                <div class="form-check form-switch col-3">
-                    <input class="form-check-input cv__dark_theme_toggle" type="checkbox" id="flexSwitchCheckDarkMode"
-                        onclick="darkThemeToggle();" />
-                    <label class="form-check-label" for="flexSwitchCheckDarkMode"><i class="fas fa-moon"></i></label>
-                </div>
-            </div>
-        </div>
-
-        <div class="container" id="stockList" style="max-width: 600px"></div>
-
-        <div class="container" style="max-width: 600px">
-            <div class="row">
-                <div class="col-3">
-                    <select class="form-select form-select-sm" id="Time" aria-label=".form-select-sm example" onclick="timeChange();">
-                        <option selected>Max Available</option>
-                        <option value="1">6 months</option>
-                        <option value="2">1 year</option>
-                        <option value="3">2 years</option>
-                    </select>
-                </div>
-                <div class="col-3">
-                    <div class="alert alert-primary p-1" role="alert">
-                        Total: <span id="total"></span>
+        <div class="row">
+            <div class="col-xxl-3 offset-xxl-3 col-xl-4 offset-xl-2 col-md-5 offset-md-1 col-sm-6">
+                <div class="container">
+                    <div class="row ">
+                        <div class="col-4">
+                            <p class="font-weight-bold">Asset</p>
+                        </div>
+                        <div class="col-3">
+                            <p class="font-weight-bold">Allocation</p>
+                        </div>
+                        <div class="col-2">
+                            <button onclick="addRow();" type="button" class="btn btn-outline-success btn-sm">
+                                ＋
+                            </button>
+                        </div>
+                    </div>
+                    <div class="row sv__bottom_buffer" id="stockRow0">
+                        <div class="col-4"><input id="0" type="text" class="form-control sv__input_padding"
+                                list="tickers" onchange="inputChange();" onkeyup="keyUpUpperCase(this);">
+                        </div>
+                        <div class="col-3">
+                            <div class="input-group">
+                                <input type="number" min="0" max="100" class="form-control percent sv__input_padding"
+                                    onchange="inputChange();">
+                                <span class="input-group-text sv__input_padding">%</span>
+                            </div>
+                        </div>
+                        <div class="col-4"><button class="btn btn-outline-danger btn-sm"
+                                onclick="this.parentNode.parentNode.remove(); updateTotalPercent();">×</button>
+                        </div>
                     </div>
                 </div>
-                <div class="col-2">
-                    <button type="button" onclick="chartButtonClick();" class="btn btn-primary btn-sm">
-                        Plot chart
-                    </button>
+
+                <div class="container" id="stockList"></div>
+
+                <div class="container">
+                    <div class="row">
+                        <div class="col-4">
+                            <p class="font-weight-bold sv__input_padding">Total</p>
+                        </div>
+                        <div class="col-3">
+                            <div class="input-group">
+                                <input type="number" class="form-control sv__input_padding" readonly id="totalPercent">
+                                </input>
+                                <span class="input-group-text sv__input_padding">%</span>
+                            </div>
+                        </div>
+                        <div class="col-2">
+                            <button type="button" onclick="chartButtonClick();" class="btn btn-primary btn-sm">
+                                Plot
+                            </button>
+                        </div>
+                        <div class = "col-3">
+                            <button type="button" onclick="randomButtonClick();" class="btn btn-outline-info btn-sm">
+                                Random
+                            </button>
+                        </div>
+                    </div>
                 </div>
-                <div class="form-check form-switch col-3">
-                    <input class="form-check-input cv__chart_toggle" type="checkbox" id="flexSwitchCheckDefault"
-                        onclick="chartToggle();" />
-                    <label class="form-check-label" for="flexSwitchCheckDefault">Show All</label>
+            </div>
+            <div class="col-xxl-3 col-xl-4 col-md-5 col-sm-6">
+                <div class="container " id="settings__ui">
+                    <div class="row justify-content-center">
+                        Settings
+                    </div>
+                    <div class="row justify-content-center">
+                        <div class="col-6">
+                            Time Period
+                        </div>
+                        <div class = "col-6">
+                            <select class="form-select form-select-sm" id="Time" aria-label=".form-select-sm example"
+                                onclick="timeChange();">
+                                <option selected>Max Available</option>
+                                <option value="1">6 months</option>
+                                <option value="2">1 year</option>
+                                <option value="3">2 years</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input cv__chart_toggle" type="checkbox"
+                                    id="flexSwitchCheckDefault" onclick="chartToggle();" />
+                                <label class="form-check-label" for="flexSwitchCheckDefault">Show All</label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input cv__table_toggle" type="checkbox" id="flexSwitchTable"
+                                    onclick="tableToggle();" />
+                                <label class="form-check-label" for="flexSwitchTable">Show Table</label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class = "row">
+                        <div class="form-check form-switch ">
+                            <input class="form-check-input cv__dark_theme_toggle" type="checkbox" id="flexSwitchCheckDarkMode"
+                                onclick="darkThemeToggle();" />
+                            <label class="form-check-label" for="flexSwitchCheckDarkMode">
+                                <i class="fas fa-moon"></i>
+                            </label>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
+    </div>
+
+    <div class="container">
+
     </div>
 
     <!-- chart -->
@@ -90,11 +145,52 @@
         <div class="centered" id="my_dataviz"></div>
     </div>
 
-    <link rel="stylesheet" , type="text/css" href="style.css" /><link rel="stylesheet" , type="text/css" href="style.css" />
+    <!-- <div id="infoTable" style="display:none">
+        <table class="table table-condensed table-striped">
+            <thead>
+                <tr>
+                    <th>Instrument</th>
+                    <th>Allocation</th>
+                    <th>Total Return</th>
+                    <th>CAGR</th>
+                    <th>Stdev</th>
+                    <th>Max. Drawdown</th>
+                    <th>Sharpe Ratio</th>
+                    <th>Sortino Ratio</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Portfolio 1</td>
+                    <td>50%</td>
+                    <td>8.68%</td>
+                    <td>9.12%</td>
+                    <td>28.74%</td>
+                    <td>-20.20%</td>
+                    <td>0.71</td>
+                    <td>1.06</td>
+                </tr>
+                <tr>
+                    <td>Portfolio 2</td>
+                    <td>50%</td>
+                    <td>8.31% </td>
+                    <td>10.28%</td>
+                    <td>25.37%</td>
+                    <td>-25.82%</td>
+                    <td>0.61</td>
+                    <td>0.88</td>
+                </tr>
+            </tbody>
+        </table>
+    </div> -->
+
+    <link rel="stylesheet" , type="text/css" href="style.css" />
+    <link rel="stylesheet" , type="text/css" href="style.css" />
     <script type="text/javascript" src="chart.js"></script>
     <script type="text/javascript" src="input.js"></script>
     <script type="text/javascript" src="calculateReturn.js"></script>
     <script type="text/javascript" src="darkTheme.js"></script>
+    <script type="text/javascript" src="infoTable.js"></script>
 </body>
 
 </html>

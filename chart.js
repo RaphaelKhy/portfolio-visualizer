@@ -33,6 +33,7 @@ $(window).on("resize", function () {
 async function chartButtonClick() {
   ValidateInputData();
   if (isInputValid) {
+    hideInfoTable();
     await removeChart();
     inputData = collectData();
     await calculateReturn(inputData);
@@ -42,6 +43,8 @@ async function chartButtonClick() {
       displayChart();
     }
     chartRequested = true;
+    showInfoTable();
+    document.getElementsByClassName("cv__table_toggle")[0].checked = true;
   }
 }
 
@@ -62,7 +65,7 @@ function ValidateInputData() {
         .eq(0)[0]
         .value.toUpperCase();
       percent = parseFloat(
-        $(divRow).children().eq(1).children().eq(0)[0].value
+        $(divRow).children().eq(1).children()[0].children[0].value
       );
 
       if ((isNaN(percent) || stock === "") && isInputValid) {
@@ -97,7 +100,7 @@ function collectData() {
   $('div[id^="stockRow"]').each(function () {
     divRow = $(this)[0];
     stock = $(divRow).children().eq(0).children().eq(0)[0].value;
-    percent = parseFloat($(divRow).children().eq(1).children().eq(0)[0].value);
+    percent = parseFloat($(divRow).children().eq(1).children()[0].children[0].value);
 
     var rowDict = {};
     rowDict.stock = stock;

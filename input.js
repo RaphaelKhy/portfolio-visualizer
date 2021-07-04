@@ -2,7 +2,7 @@ var rowNum = 0;
 var isInputValid = true;
 
 $(document).ready(function () {
-    addRow(); //when document loads add one row
+    // addRow(); //when document loads add one row
 });
 
 function addRow() {
@@ -26,7 +26,7 @@ function createInputRow() {
 
 function createStockInputElement() {
     var newDiv = document.createElement('div');
-    newDiv.className = "col-3";
+    newDiv.className = "col-4";
     var input = document.createElement('input');
     input.id = rowNum;
     input.type = "text";
@@ -52,21 +52,32 @@ function createStockInputElement() {
 function createPercentInputElement() {
     var newdiv = document.createElement('div');
     newdiv.className = "col-3";
+
+    var inputDiv = document.createElement('div');
+    inputDiv.className = "input-group";
+
     var input = document.createElement('input');
     input.type = "number";
     input.min = "0";
     input.max = "100";
-    input.placeholder = "%";
     input.className = "form-control percent sv__input_padding";
     input.setAttribute("onchange", "inputChange();");
+    inputDiv.appendChild(input);
 
-    newdiv.appendChild(input);
+    var percentSymbol = document.createElement('span');
+    percentSymbol.className = "input-group-text sv__input_padding";
+    percentSymbol.innerHTML = "%";
+
+    inputDiv.appendChild(percentSymbol);
+
+    newdiv.appendChild(inputDiv);
+
     return newdiv;
 };
 
 function createDeleteButton() {
     var newdiv = document.createElement('div');
-    newdiv.className = "col-4";
+    newdiv.className = "col-5";
     var button = document.createElement('button');
     button.className = "btn btn-outline-danger btn-sm";
     button.setAttribute("onclick", "this.parentNode.parentNode.remove(); updateTotalPercent();"); //delete row on click
@@ -81,7 +92,7 @@ function inputChange() { //Preliminary input validation
     $('div[id^="stockRow"]').each(function () { //iterate through row inputs
         divRow = $(this)[0];
         stock = $(divRow).children().eq(0).children().eq(0)[0].value.toUpperCase();
-        percent = parseFloat($(divRow).children().eq(1).children().eq(0)[0].value);
+        percent = parseFloat($(divRow).children().eq(1).children()[0].children[0].value);
 
         //test for invalid stock
         if (stock.length > 0) {
@@ -131,17 +142,17 @@ function displayToast(message) {
 
 function updateTotalPercent() {//updates and returns total percent
     var totalPercent = 0;
-    $('#total').text(totalPercent);
+    document.getElementById("totalPercent").value = totalPercent;
     $('div[id^="stockRow"]').each(function () {
         divRow = $(this)[0];
         stock = $(divRow).children().eq(0).children().eq(0)[0].value.toUpperCase();
-        percent = parseFloat($(divRow).children().eq(1).children().eq(0)[0].value);
+        percent = parseFloat($(divRow).children().eq(1).children()[0].children[0].value);
 
         if (!isNaN(parseFloat(percent))) { // Update totalPercent
             totalPercent += parseFloat(percent);
         };
     });
-    $('#total').text(totalPercent + "%");
+    document.getElementById("totalPercent").value = totalPercent;
     return totalPercent;
 };
 
@@ -154,11 +165,13 @@ function randomButtonClick() {
         return;
     }
 
+    //generate random data as input
     var percentList = randomPercentList(rowCount, 100);
     var stockList = randomStockList(rowCount);
     var percentListIndex = 0;
     var stockListIndex = 0;
 
+    //insert random data into input fields
     $('div[id^="stockRow"]').each(function () {
         var divRow = $(this)[0];
         var stock = stockList[stockListIndex];
@@ -166,7 +179,7 @@ function randomButtonClick() {
         $(divRow).children().eq(0).children().eq(0)[0].value = stock;
         percent = percentList[percentListIndex];
         percentListIndex++;
-        $(divRow).children().eq(1).children().eq(0)[0].value = percent;
+        $(divRow).children().eq(1).children()[0].children[0].value = percent;
     });
     updateTotalPercent();
     chartButtonClick();
@@ -180,7 +193,7 @@ function getRowCount() { //returns number of input rows
     return numRows;
 }
 
-function randomPercentList(quantity, sum) { //returns array with random values > 0
+function randomPercentList(quantity, sum) { //returns array with random values greater than 0
     // every element is initialized to 1
     let arr = new Array(quantity);
     for (let i = 0; i < arr.length; i++) {
