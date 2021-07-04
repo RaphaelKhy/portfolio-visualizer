@@ -69,7 +69,7 @@
                         </div>
                         <div class="col-3">
                             <div class="input-group">
-                                <input type="number" class="form-control sv__input_padding" readonly id="totalPercent">
+                                <input type="number" class="form-control sv__input_padding" readonly id="totalPercent" placeholder="0">
                                 </input>
                                 <span class="input-group-text sv__input_padding">%</span>
                             </div>
@@ -144,44 +144,24 @@
         <div class="centered" id="my_dataviz"></div>
     </div>
 
-    <!-- <div id="infoTable" style="display:none">
-        <table class="table table-condensed table-striped">
-            <thead>
-                <tr>
-                    <th>Instrument</th>
-                    <th>Allocation</th>
-                    <th>Total Return</th>
-                    <th>CAGR</th>
-                    <th>Stdev</th>
-                    <th>Max. Drawdown</th>
-                    <th>Sharpe Ratio</th>
-                    <th>Sortino Ratio</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>Portfolio 1</td>
-                    <td>50%</td>
-                    <td>8.68%</td>
-                    <td>9.12%</td>
-                    <td>28.74%</td>
-                    <td>-20.20%</td>
-                    <td>0.71</td>
-                    <td>1.06</td>
-                </tr>
-                <tr>
-                    <td>Portfolio 2</td>
-                    <td>50%</td>
-                    <td>8.31% </td>
-                    <td>10.28%</td>
-                    <td>25.37%</td>
-                    <td>-25.82%</td>
-                    <td>0.61</td>
-                    <td>0.88</td>
-                </tr>
-            </tbody>
-        </table>
-    </div> -->
+    <div class="row">
+        <div class="col-xxl-6 offset-xxl-3 col-xl-8 offset-xl-2 col-md-10 offset-md-1">
+            <div id="infoTable" style="display:none">
+                <table class="table table-condensed table-striped">
+                    <thead>
+                        <tr>
+                            <th>Asset</th>
+                            <th>Allocation</th>
+                            <th>Total Return</th>
+                            <th>Max. Drawdown</th>
+                        </tr>
+                    </thead>
+                    <tbody id = "tableBody">
+                    </tbody>
+                </table>
+            </div>        
+        </div>
+    </div>
 
     <link rel="stylesheet" , type="text/css" href="style.css" />
     <link rel="stylesheet" , type="text/css" href="style.css" />
