@@ -10,3 +10,19 @@
 .sv__input_padding {
   padding: 3px 6px 3px 6px;
 }
+
+#settings__ui{
+  background: rgb(230, 230, 230);
+}
+
+#totalPercent{
+  padding-right: 0px;
+}
+
+/* .sv__minWidth{
+  min-width: 300px;
+}
+
+.sv__maxWidth{
+  max-width: 500px;
+} */

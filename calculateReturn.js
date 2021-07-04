@@ -80,7 +80,7 @@ function AddPercentReturnToStorage(){//Adds percent return to each stock in stor
 function mergeStocks(){//combine performance of stocks bassed on allocation
     
     storageLength = storage.length;
-    storage[storageLength] = {stock:"Combined", percentAllocation: 100};
+    storage[storageLength] = {stock:"Portfolio", percentAllocation: 100};
     dataLength = storage[0].data.length;
     allDaysReturn = [];
     var dayTotalReturn = [];
@@ -118,7 +118,7 @@ function getMinValue(data) {//returns minimum percent return
     for (var day = 0; day < data.length; day++) {
         percentReturn = data[day].percentReturn;
         if (percentReturn < minYValue) {
-        minYValue = percentReturn;
+            minYValue = percentReturn;
         }
     }
     return minYValue;

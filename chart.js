@@ -33,6 +33,7 @@ $(window).on("resize", function () {
 async function chartButtonClick() {
   ValidateInputData();
   if (isInputValid) {
+    hideInfoTable();
     await removeChart();
     inputData = collectData();
     await calculateReturn(inputData);
@@ -42,6 +43,9 @@ async function chartButtonClick() {
       displayChart();
     }
     chartRequested = true;
+    showInfoTable();
+    document.getElementsByClassName("cv__table_toggle")[0].checked = true;
+    document.getElementById("cv__show_chart_toggle").checked = true;
   }
 }
 
@@ -62,7 +66,7 @@ function ValidateInputData() {
         .eq(0)[0]
         .value.toUpperCase();
       percent = parseFloat(
-        $(divRow).children().eq(1).children().eq(0)[0].value
+        $(divRow).children().eq(1).children()[0].children[0].value
       );
 
       if ((isNaN(percent) || stock === "") && isInputValid) {
@@ -97,7 +101,7 @@ function collectData() {
   $('div[id^="stockRow"]').each(function () {
     divRow = $(this)[0];
     stock = $(divRow).children().eq(0).children().eq(0)[0].value;
-    percent = parseFloat($(divRow).children().eq(1).children().eq(0)[0].value);
+    percent = parseFloat($(divRow).children().eq(1).children()[0].children[0].value);
 
     var rowDict = {};
     rowDict.stock = stock;
@@ -133,12 +137,15 @@ function displayChart() {
     prev.maxValue > curr.maxValue ? prev : curr
   ).maxValue;
 
+  // var assetUIWidth = document.getElementById("assets__ui").clientWidth;
+  // var settingsUIWidth = document.getElementById("settings__ui").clientWidth;
   documentWidth = document.body.clientWidth * 0.99;
+  // chartWidth = Math.min(documentWidth, (assetUIWidth+settingsUIWidth));
 
   inputHeight = document.getElementsByClassName("sv__ui_block")[0].clientHeight;
 
   documentHeight = document.documentElement.scrollHeight;
-  chartHeight = Math.min(documentWidth * 0.6, documentHeight - inputHeight);
+  chartHeight = Math.min(documentWidth * 0.5, documentHeight - inputHeight);
 
   // set the dimensions and margins of the graph
   var margin = { top: 10, right: 30, bottom: 50, left: 60 },
@@ -289,7 +296,7 @@ async function adjustChartOnResize() {
   }
 }
 
-function chartToggle() {
+function allAssetToggle() {
   if (document.getElementsByClassName("cv__chart_toggle")[0].checked) {
     showAll = true;
   } else {
@@ -311,7 +318,7 @@ function displayChartDarkMode() {
   inputHeight = document.getElementsByClassName("sv__ui_block")[0].clientHeight;
 
   documentHeight = document.documentElement.scrollHeight;
-  chartHeight = Math.min(documentWidth * 0.6, documentHeight - inputHeight);
+  chartHeight = Math.min(documentWidth * 0.5, documentHeight - inputHeight);
 
   // set the dimensions and margins of the graph
   var margin = { top: 10, right: 30, bottom: 50, left: 60 },
@@ -468,5 +475,15 @@ function timeChange(){
   if(updatedTime != selectedTime){
     selectedTime = updatedTime;
     chartButtonClick();
+  }
+}
+
+function showChartToggle(){
+  var chartToggle = document.getElementById("cv__show_chart_toggle");
+  var chart = document.getElementById("my_dataviz");
+  if (chartToggle.checked) {
+    chart.style.display = "block";
+  } else {
+    chart.style.display = "none";
   }
 }
