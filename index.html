@@ -69,7 +69,8 @@
                         </div>
                         <div class="col-3">
                             <div class="input-group">
-                                <input type="number" class="form-control sv__input_padding" readonly id="totalPercent" placeholder="0">
+                                <input type="number" class="form-control sv__input_padding" readonly id="totalPercent"
+                                    placeholder="0">
                                 </input>
                                 <span class="input-group-text sv__input_padding">%</span>
                             </div>
@@ -79,7 +80,7 @@
                                 Plot
                             </button>
                         </div>
-                        <div class = "col-3">
+                        <div class="col-3">
                             <button type="button" onclick="randomButtonClick();" class="btn btn-outline-info btn-sm">
                                 Random
                             </button>
@@ -96,7 +97,7 @@
                         <div class="col-6">
                             Time Period
                         </div>
-                        <div class = "col-6">
+                        <div class="col-6">
                             <select class="form-select form-select-sm" id="Time" aria-label=".form-select-sm example"
                                 onclick="timeChange();">
                                 <option selected>Max Available</option>
@@ -110,8 +111,8 @@
                         <div class="col-6">
                             <div class="form-check form-switch">
                                 <input class="form-check-input cv__chart_toggle" type="checkbox"
-                                    id="flexSwitchCheckDefault" onclick="chartToggle();" />
-                                <label class="form-check-label" for="flexSwitchCheckDefault">Show All</label>
+                                    id="flexSwitchCheckDefault" onclick="allAssetToggle();" />
+                                <label class="form-check-label" for="flexSwitchCheckDefault">Show All Assets</label>
                             </div>
                         </div>
                         <div class="col-6">
@@ -122,13 +123,22 @@
                             </div>
                         </div>
                     </div>
-                    <div class = "row">
-                        <div class="form-check form-switch ">
-                            <input class="form-check-input cv__dark_theme_toggle" type="checkbox" id="flexSwitchCheckDarkMode"
-                                onclick="darkThemeToggle();" />
-                            <label class="form-check-label" for="flexSwitchCheckDarkMode">
-                                <i class="fas fa-moon"></i>
-                            </label>
+                    <div class="row">
+                        <div class="col-6">
+                            <div class="form-check form-switch ">
+                                <input class="form-check-input cv__dark_theme_toggle" type="checkbox"
+                                    id="flexSwitchCheckDarkMode" onclick="darkThemeToggle();" />
+                                <label class="form-check-label" for="flexSwitchCheckDarkMode">
+                                    <i class="fas fa-moon"></i>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-check form-switch">
+                                <input class="form-check-input cv__show_chart_toggle" type="checkbox"
+                                    id="flexSwitchCheckDefault" onclick="showChartToggle();" />
+                                <label class="form-check-label" for="flexSwitchCheckDefault">Show Chart</label>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -156,10 +166,10 @@
                             <th>Max. Drawdown</th>
                         </tr>
                     </thead>
-                    <tbody id = "tableBody">
+                    <tbody id="tableBody">
                     </tbody>
                 </table>
-            </div>        
+            </div>
         </div>
     </div>
 
@@ -169,7 +179,7 @@
     <script type="text/javascript" src="input.js"></script>
     <script type="text/javascript" src="calculateReturn.js"></script>
     <script type="text/javascript" src="darkTheme.js"></script>
-    <script type="text/javascript" src="infoTable.js"></script>
+    <script type="text/javascript" src="table.js"></script>
 </body>
 
 </html>

@@ -141,7 +141,7 @@ function displayChart() {
   inputHeight = document.getElementsByClassName("sv__ui_block")[0].clientHeight;
 
   documentHeight = document.documentElement.scrollHeight;
-  chartHeight = Math.min(documentWidth * 0.6, documentHeight - inputHeight);
+  chartHeight = Math.min(documentWidth * 0.5, documentHeight - inputHeight);
 
   // set the dimensions and margins of the graph
   var margin = { top: 10, right: 30, bottom: 50, left: 60 },
@@ -292,7 +292,7 @@ async function adjustChartOnResize() {
   }
 }
 
-function chartToggle() {
+function allAssetToggle() {
   if (document.getElementsByClassName("cv__chart_toggle")[0].checked) {
     showAll = true;
   } else {
@@ -472,4 +472,13 @@ function timeChange(){
     selectedTime = updatedTime;
     chartButtonClick();
   }
+}
+
+function showChartToggle(){
+  if (document.getElementsByClassName("cv__show_chart_toggle")[0].checked) {
+    $("#my_dataviz").show();
+  } else {
+    ("#my_dataviz").hide();
+  }
+  chartButtonClick();
 }
