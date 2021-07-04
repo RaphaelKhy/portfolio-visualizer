@@ -24,8 +24,6 @@ function createTableRows(){
   for(var i = 0; i < storage.length; i++){
     $('#tableBody').append(createTableRow(storage[i]));
   }
-
-  console.log(storage);
 }
 
 function createTableRow(stock){
