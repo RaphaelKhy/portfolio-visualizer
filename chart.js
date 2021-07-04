@@ -139,13 +139,13 @@ function displayChart() {
 
   // var assetUIWidth = document.getElementById("assets__ui").clientWidth;
   // var settingsUIWidth = document.getElementById("settings__ui").clientWidth;
-  documentWidth = document.body.clientWidth * 0.99;
+  documentWidth = Math.min(document.body.clientWidth * 0.99, 1000);
   // chartWidth = Math.min(documentWidth, (assetUIWidth+settingsUIWidth));
 
   inputHeight = document.getElementsByClassName("sv__ui_block")[0].clientHeight;
 
-  documentHeight = document.documentElement.scrollHeight;
-  chartHeight = Math.min(documentWidth * 0.5, documentHeight - inputHeight);
+  scrollHeight = document.documentElement.scrollHeight;
+  chartHeight = Math.min(documentWidth * 0.5, scrollHeight - inputHeight);
 
   // set the dimensions and margins of the graph
   var margin = { top: 10, right: 30, bottom: 50, left: 60 },
@@ -313,7 +313,7 @@ function displayChartDarkMode() {
     prev.maxValue > curr.maxValue ? prev : curr
   ).maxValue;
 
-  documentWidth = document.body.clientWidth * 0.99;
+  documentWidth = Math.min(document.body.clientWidth * 0.99, 1000);
 
   inputHeight = document.getElementsByClassName("sv__ui_block")[0].clientHeight;
 
