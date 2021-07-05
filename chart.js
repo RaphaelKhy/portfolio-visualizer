@@ -42,10 +42,13 @@ async function chartButtonClick() {
     }else{
       displayChart();
     }
+    //toggle settings only on first chart plot
+    if(!chartRequested){
+      document.getElementsByClassName("cv__table_toggle")[0].checked = true;
+      document.getElementById("cv__show_chart_toggle").checked = true;
+    }
     chartRequested = true;
     showInfoTable();
-    document.getElementsByClassName("cv__table_toggle")[0].checked = true;
-    document.getElementById("cv__show_chart_toggle").checked = true;
   }
 }
 
@@ -137,20 +140,16 @@ function displayChart() {
     prev.maxValue > curr.maxValue ? prev : curr
   ).maxValue;
 
-  // var assetUIWidth = document.getElementById("assets__ui").clientWidth;
-  // var settingsUIWidth = document.getElementById("settings__ui").clientWidth;
-  documentWidth = Math.min(document.body.clientWidth * 0.99, 1000);
-  // chartWidth = Math.min(documentWidth, (assetUIWidth+settingsUIWidth));
+  chartWidth = Math.min(document.body.clientWidth * 0.99, 1000);
 
   inputHeight = document.getElementsByClassName("sv__ui_block")[0].clientHeight;
-
   scrollHeight = document.documentElement.scrollHeight;
-  chartHeight = Math.min(documentWidth * 0.5, scrollHeight - inputHeight);
+  chartHeight = Math.min(chartWidth * 0.5, scrollHeight - inputHeight);
 
   // set the dimensions and margins of the graph
-  var margin = { top: 10, right: 30, bottom: 50, left: 60 },
-    axisWidth = documentWidth - margin.left - margin.right,
-    chartWidth = documentWidth - margin.left - margin.right - 70,
+  var margin = { top: 10, right: 30, bottom: 50, left: 60},
+    axisWidth = chartWidth - margin.left - margin.right,
+    chartWidth = chartWidth - margin.left - margin.right - 70,
     height = chartHeight - margin.top - margin.bottom;
 
   // append the svg object to the body of the page
