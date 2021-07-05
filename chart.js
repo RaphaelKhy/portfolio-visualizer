@@ -44,11 +44,12 @@ async function chartButtonClick() {
     }
     //toggle settings only on first chart plot
     if(!chartRequested){
+      console.log(chartRequested);
       document.getElementsByClassName("cv__table_toggle")[0].checked = true;
       document.getElementById("cv__show_chart_toggle").checked = true;
+      showInfoTable();
     }
     chartRequested = true;
-    showInfoTable();
   }
 }
 
@@ -298,6 +299,7 @@ async function adjustChartOnResize() {
 function allAssetToggle() {
   if (document.getElementsByClassName("cv__chart_toggle")[0].checked) {
     showAll = true;
+    document.getElementById("cv__show_chart_toggle").checked = true;
   } else {
     showAll = false;
   }
@@ -481,8 +483,10 @@ function showChartToggle(){
   var chartToggle = document.getElementById("cv__show_chart_toggle");
   var chart = document.getElementById("my_dataviz");
   if (chartToggle.checked) {
-    chart.style.display = "block";
+    chartButtonClick();
   } else {
-    chart.style.display = "none";
+    removeChart();
+    document.getElementsByClassName("cv__chart_toggle")[0].checked = false;
+    showAll = false;
   }
 }
