@@ -19,6 +19,11 @@
   padding-right: 0px;
 }
 
+.centered{
+  justify-content: center;
+  display: flex;
+}
+
 /* .sv__minWidth{
   min-width: 300px;
 }
