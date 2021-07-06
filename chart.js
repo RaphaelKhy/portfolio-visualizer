@@ -33,7 +33,10 @@ $(window).on("resize", function () {
 async function chartButtonClick() {
   ValidateInputData();
   if (isInputValid) {
+
+    //hide table to avoid screen jump
     hideInfoTable();
+
     await removeChart();
     inputData = collectData();
     await calculateReturn(inputData);
@@ -48,8 +51,11 @@ async function chartButtonClick() {
       document.getElementsByClassName("cv__table_toggle")[0].checked = true;
       document.getElementById("cv__show_chart_toggle").checked = true;
       showInfoTable();
+      chartRequested = true;
     }
-    chartRequested = true;
+
+    //show table if table toggle is checked
+    tableToggle();
   }
 }
 
