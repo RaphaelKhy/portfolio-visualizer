@@ -140,7 +140,7 @@ function displayToast(message) {
     }).showToast();
 };
 
-function updateTotalPercent() {//updates and returns total percent
+async function updateTotalPercent() {//updates and returns total percent
     var totalPercent = 0;
     document.getElementById("totalPercent").value = totalPercent;
     $('div[id^="stockRow"]').each(function () {
@@ -156,7 +156,7 @@ function updateTotalPercent() {//updates and returns total percent
     return totalPercent;
 };
 
-function randomButtonClick() {
+async function randomButtonClick() {
     var rowCount = getRowCount();
 
     //test if number of rows exceeds available stocks
@@ -181,8 +181,16 @@ function randomButtonClick() {
         percentListIndex++;
         $(divRow).children().eq(1).children()[0].children[0].value = percent;
     });
-    updateTotalPercent();
-    chartButtonClick();
+    await updateTotalPercent();
+    await chartButtonClick();
+
+    if(document.getElementsByClassName("cv__table_toggle")[0].checked){
+        if(document.getElementsByClassName("cv__dark_theme_toggle")[0].checked){
+            setTableToDarkMode();
+        }else{
+            setTableToLightMode();
+        }
+    }
 }
 
 function getRowCount() { //returns number of input rows
