@@ -45,9 +45,9 @@ async function chartButtonClick() {
     }else{
       displayChart();
     }
+    
     //toggle settings only on first chart plot
     if(!chartRequested){
-      console.log(chartRequested);
       document.getElementsByClassName("cv__table_toggle")[0].checked = true;
       document.getElementById("cv__show_chart_toggle").checked = true;
       showInfoTable();
@@ -487,7 +487,6 @@ function timeChange(){
 
 function showChartToggle(){
   var chartToggle = document.getElementById("cv__show_chart_toggle");
-  var chart = document.getElementById("my_dataviz");
   if (chartToggle.checked) {
     chartButtonClick();
   } else {

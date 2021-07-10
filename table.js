@@ -44,13 +44,13 @@ function createTableRow(stock){
   //Total Return
   var totalReturn = stock.data[stock.data.length-1].percentReturn;
   var totalReturnColumn = document.createElement('td');
-  totalReturnColumn.innerHTML = totalReturn + "%";
+  totalReturnColumn.innerHTML = totalReturn.toFixed(2) + "%";
   newRow.appendChild(totalReturnColumn);
 
   //Max Drawdown
   var drawdown = stock.minValue;
   var drawdownColumn = document.createElement('td');
-  drawdownColumn.innerHTML = drawdown + "%";
+  drawdownColumn.innerHTML = drawdown.toFixed(2) + "%";
   newRow.appendChild(drawdownColumn);
   return newRow;
 }
