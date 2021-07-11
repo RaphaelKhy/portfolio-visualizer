@@ -13,6 +13,7 @@ function tableToggle() {
   } else {
     hideInfoTable();
   }
+  setTableToSelectedMode();
 }
 
 function createTableRows(){
