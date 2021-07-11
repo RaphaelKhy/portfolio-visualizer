@@ -53,9 +53,9 @@ async function chartButtonClick() {
       showInfoTable();
       chartRequested = true;
     }
-
-    //show table if table toggle is checked
+    
     tableToggle();
+    setTableToSelectedMode();
   }
 }
 

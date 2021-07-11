@@ -54,3 +54,4 @@ function createTableRow(stock){
   newRow.appendChild(drawdownColumn);
   return newRow;
 }
+

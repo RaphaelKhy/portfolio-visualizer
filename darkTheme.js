@@ -13,11 +13,6 @@ function darkThemeToggle() {
       removeChart();
       displayChartDarkMode();
     }
-
-    //check if table is selected
-    if (document.getElementsByClassName("cv__table_toggle")[0].checked) {
-      setTableToDarkMode();
-    }
   } else {
     darkMode = false;
     document.body.style.background = "white";
@@ -31,12 +26,9 @@ function darkThemeToggle() {
       removeChart();
       displayChart();
     }
-
-    //check if table is selected
-    if (document.getElementsByClassName("cv__table_toggle")[0].checked) {
-      setTableToLightMode();
-    }
   }
+  
+  setTableToSelectedMode();
 }
 
 function setTableHeadersToDarkMode() {
@@ -67,12 +59,14 @@ function setTableRowsToLightMode(){
   }
 }
 
-function setTableToDarkMode(){
-  setTableHeadersToDarkMode();
-  setTableRowsToDarkMode();
-}
-
-function setTableToLightMode(){
-  setTableHeadersToLightMode();
-  setTableRowsToLightMode();
+function setTableToSelectedMode(){
+  if(document.getElementsByClassName("cv__table_toggle")[0].checked){
+    if(document.getElementsByClassName("cv__dark_theme_toggle")[0].checked){
+      setTableHeadersToDarkMode();
+      setTableRowsToDarkMode();
+    }else{
+      setTableHeadersToLightMode();
+      setTableRowsToLightMode();
+    }
+  }
 }
