@@ -13,6 +13,7 @@ function tableToggle() {
   } else {
     hideInfoTable();
   }
+  setTableToSelectedMode();
 }
 
 function createTableRows(){
@@ -54,3 +55,4 @@ function createTableRow(stock){
   newRow.appendChild(drawdownColumn);
   return newRow;
 }
+

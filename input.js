@@ -183,14 +183,7 @@ async function randomButtonClick() {
     });
     await updateTotalPercent();
     await chartButtonClick();
-
-    if(document.getElementsByClassName("cv__table_toggle")[0].checked){
-        if(document.getElementsByClassName("cv__dark_theme_toggle")[0].checked){
-            setTableToDarkMode();
-        }else{
-            setTableToLightMode();
-        }
-    }
+    setTableToSelectedMode();
 }
 
 function getRowCount() { //returns number of input rows
