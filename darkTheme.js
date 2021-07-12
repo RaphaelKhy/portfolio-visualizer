@@ -3,9 +3,9 @@ var darkMode = false;
 function darkThemeToggle() {
   if (document.getElementsByClassName("cv__dark_theme_toggle")[0].checked) {
     darkMode = true;
-    document.body.style.background = "#121212";
+    document.body.style.background = "#212529";
     document.body.style.color = "white";
-    document.getElementById("settings__ui").style.background = "#242424";
+    document.getElementById("settings__ui").style.background = "rgb(64 72 81)";
 
     //check if chart toggle is on before displaying chart
     var chartToggle = document.getElementById("cv__show_chart_toggle");
@@ -13,12 +13,12 @@ function darkThemeToggle() {
       removeChart();
       displayChartDarkMode();
     }
+    setNavbarToDarkMode();
   } else {
     darkMode = false;
     document.body.style.background = "white";
     document.body.style.color = "black";
-    document.getElementById("settings__ui").style.background =
-      "rgb(230, 230, 230)";
+    document.getElementById("settings__ui").style.background = "rgb(230, 230, 230)";
 
     //check if chart toggle is on before displaying chart
     var chartToggle = document.getElementById("cv__show_chart_toggle");
@@ -26,8 +26,8 @@ function darkThemeToggle() {
       removeChart();
       displayChart();
     }
+    setNavbarToLightMode();
   }
-  
   setTableToSelectedMode();
 }
 
@@ -69,4 +69,14 @@ function setTableToSelectedMode(){
       setTableRowsToLightMode();
     }
   }
+}
+
+function setNavbarToDarkMode(){
+  var navBar = document.getElementById("navbar");
+  navBar.className = "navbar navbar-dark bg-dark";
+}
+
+function setNavbarToLightMode(){
+  var navBar = document.getElementById("navbar");
+  navBar.className = "navbar navbar-light bg-light";
 }

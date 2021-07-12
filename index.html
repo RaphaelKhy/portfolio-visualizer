@@ -22,12 +22,19 @@
         integrity="sha384-SZXxX4whJ79/gErwcOYf+zWLeJdY/qpuqC4cAa9rOGUstPomtqpuNWT9wdPEn2fk" crossorigin="anonymous" />
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.15.3/css/all.css"
         integrity="sha384-SZXxX4whJ79/gErwcOYf+zWLeJdY/qpuqC4cAa9rOGUstPomtqpuNWT9wdPEn2fk" crossorigin="anonymous" />
-     <link rel="icon" type="image/png" href="/favicon.png"/>
+    <link rel="icon" type="image/png" href="/favicon.png" />
 </head>
 
 <body>
+
+    <nav class="navbar navbar-light bg-light" id="navbar">
+        <div class="container-fluid">
+            <span class="navbar-brand mb-0 h1">Portfolio Visualizer</span>
+        </div>
+    </nav>
+
     <!-- inputs -->
-    <div class="sv__ui_block">
+    <div class="sv__ui_block sv__top_buffer">
         <div class="row">
             <div class="col-xxl-3 offset-xxl-3 col-xl-4 offset-xl-2 col-md-5 offset-md-1 col-sm-6" id="assets__ui">
                 <div class="container">
@@ -158,10 +165,10 @@
                 <table class="table table-condensed table-striped">
                     <thead>
                         <tr>
-                            <th class = "tableHeader">Asset</th>
-                            <th class = "tableHeader">Allocation</th>
-                            <th class = "tableHeader">Total Return</th>
-                            <th class = "tableHeader">Max. Drawdown</th>
+                            <th class="tableHeader">Asset</th>
+                            <th class="tableHeader">Allocation</th>
+                            <th class="tableHeader">Total Return</th>
+                            <th class="tableHeader">Max. Drawdown</th>
                         </tr>
                     </thead>
                     <tbody id="tableBody">

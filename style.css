@@ -23,3 +23,7 @@
   justify-content: center;
   display: flex;
 }
+
+.sv__top_buffer {
+  margin-top: 8px;
+}
