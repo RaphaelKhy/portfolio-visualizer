@@ -19,7 +19,6 @@ const acceptedStocks = [
   "SLV",
   "SPY",
   "T",
-  "TSLA",
   "XOM",
 ];
 
