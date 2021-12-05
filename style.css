@@ -33,6 +33,6 @@
   color: black;
 }
 
-.body{
-  overflow: hidden;
+html, body{
+  overflow-x: hidden !important;
 }
