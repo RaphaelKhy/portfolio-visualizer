@@ -11,19 +11,28 @@
   padding: 3px 6px 3px 6px;
 }
 
-#settings__ui{
+#settings__ui {
   background: rgb(230, 230, 230);
 }
 
-#totalPercent{
+#totalPercent {
   padding-right: 0px;
 }
 
-.centered{
+.centered {
   justify-content: center;
   display: flex;
 }
 
 .sv__top_buffer {
   margin-top: 8px;
+}
+
+.select2-results__option {
+  background-color: white;
+  color: black;
+}
+
+.body{
+  overflow: hidden;
 }

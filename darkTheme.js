@@ -18,7 +18,8 @@ function darkThemeToggle() {
     darkMode = false;
     document.body.style.background = "white";
     document.body.style.color = "black";
-    document.getElementById("settings__ui").style.background = "rgb(230, 230, 230)";
+    document.getElementById("settings__ui").style.background =
+      "rgb(230, 230, 230)";
 
     //check if chart toggle is on before displaying chart
     var chartToggle = document.getElementById("cv__show_chart_toggle");
@@ -45,38 +46,38 @@ function setTableHeadersToLightMode() {
   }
 }
 
-function setTableRowsToDarkMode(){
+function setTableRowsToDarkMode() {
   var tableBody = document.getElementById("tableBody").childNodes;
-  for(var i = 0; i < tableBody.length; i++){
+  for (var i = 0; i < tableBody.length; i++) {
     tableBody[i].style.color = "white";
   }
 }
 
-function setTableRowsToLightMode(){
+function setTableRowsToLightMode() {
   var tableBody = document.getElementById("tableBody").childNodes;
-  for(var i = 0; i < tableBody.length; i++){
+  for (var i = 0; i < tableBody.length; i++) {
     tableBody[i].style.color = "black";
   }
 }
 
-function setTableToSelectedMode(){
-  if(document.getElementsByClassName("cv__table_toggle")[0].checked){
-    if(document.getElementsByClassName("cv__dark_theme_toggle")[0].checked){
+function setTableToSelectedMode() {
+  if (document.getElementsByClassName("cv__table_toggle")[0].checked) {
+    if (document.getElementsByClassName("cv__dark_theme_toggle")[0].checked) {
       setTableHeadersToDarkMode();
       setTableRowsToDarkMode();
-    }else{
+    } else {
       setTableHeadersToLightMode();
       setTableRowsToLightMode();
     }
   }
 }
 
-function setNavbarToDarkMode(){
+function setNavbarToDarkMode() {
   var navBar = document.getElementById("navbar");
   navBar.className = "navbar navbar-dark bg-dark";
 }
 
-function setNavbarToLightMode(){
+function setNavbarToLightMode() {
   var navBar = document.getElementById("navbar");
   navBar.className = "navbar navbar-light bg-light";
 }
